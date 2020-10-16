@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "codecompl"
+version = "0.1.0"
+description = "Journal Code compliance database for web backend."
+authors = ["João Paulo Taylor Ienczak Zanette <jpaulotiz@gmail.com>"]
+license = "mit"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^1.1.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

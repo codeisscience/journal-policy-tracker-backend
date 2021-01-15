@@ -31,7 +31,7 @@ If installation succeeds, you should be able to see the current installed Flask
 version:
 
 ```console
-$ flask --help
+$ flask --version
 ```
 
 ### Running

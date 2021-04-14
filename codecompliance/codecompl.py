@@ -2,11 +2,7 @@ from pathlib import Path
 from textwrap import dedent
 import sqlite3
 
-from flask import Flask
-
-
-app = Flask(__name__)
-
+from codecompliance import app
 
 def initialize_db(path: Path):
     db = sqlite3.connect(path)
@@ -109,9 +105,3 @@ def list_journal_policies():
     '''Lists the policies from a journal.'''
     return STUB_PAGE_MESSAGE
 
-
-def main():
-    initialize_db(Path('journals.db'))
-
-
-main()

@@ -39,5 +39,9 @@ $ flask --version
 This is a Flask application, so you should run as:
 
 ```console
-$ FLASK_APP=app flask run
+$ flask run
+```
+or
+```console
+$ python run.py
 ```

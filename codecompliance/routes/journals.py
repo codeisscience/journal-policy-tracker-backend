@@ -2,8 +2,8 @@ from pathlib import Path
 from textwrap import dedent
 import sqlite3
 
-from . import app
-from . import db
+from codecompliance import app
+from codecompliance import db
 
 STUB_PAGE_MESSAGE = dedent('''
     Nothing here yet.<br>

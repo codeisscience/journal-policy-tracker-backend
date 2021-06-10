@@ -1,14 +1,20 @@
-# Code Compliance: Backend
+[![Starware](https://img.shields.io/badge/⭐-Starware-f5a91a?labelColor=black)](https://github.com/zepfietje/starware)
 
-This is the backend for the [Code
-Compliance](https://github.com/codeisscience/codecompliance-frontend) web
-application.
+<p align="center">
+  <img src="logo.png">
+</p>
+<h1 align="center">Journal Policy Tracker: Backend</h1>
 
-## Testing locally
+### This is the backend repository for the [Journal Policy Tracker](https://github.com/codeisscience/codecompliance-frontend) web application.
+
+### Database Schema Design for the Journal Policy Tracker can be found [here](https://github.com/codeisscience/code-is-science/issues/62#issuecomment-686518507)
+
+<h2 align="center">Local Environment Setup</h2>
+<hr>
 
 ### Installing dependencies
 
-#### Poetry
+<h3 align="center" style="font-weight: 800; color: cyan;">Poetry</h3>
 
 After cloning this repo, you can use
 [Poetry](https://python-poetry.org/docs/#installation) to create the virtual
@@ -21,14 +27,14 @@ to leave the shell/virtualenv):
 $ poetry shell
 ```
 
-Then, install the dependencies:
+> Then, install the dependencies:
 
 ```console
 $ poetry install
 ```
 
-If installation succeeds, you should be able to see the current installed Flask
-version:
+> If installation succeeds, you should be able to see the current installed Flask
+> version:
 
 ```console
 $ flask --version
@@ -36,8 +42,35 @@ $ flask --version
 
 ### Running
 
-This is a Flask application, so you should run as:
+> To run the flask application:
 
 ```console
-$ FLASK_APP=app flask run
+$ poetry run python run.py
 ```
+
+<h2 align="center">Contribute to this project</h2>
+<hr>
+
+Our Slack Community: [Slack Invite](https://join.slack.com/t/codeisscience/shared_invite/zt-ia30nh6t-cgGvNpYAaWHZsg9HvmuHTQ) <br>
+
+`Contributions are welcome 🎉🎉`
+
+Please refer to the project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
+
+1. **Fork** the repo on GitHub
+2. **Clone** the project to your own machine
+3. **Commit** changes to your own branch
+4. **Push** your work back up to your fork
+5. Submit a **Pull request** so that we can review your changes
+
+NOTE 1: Please abide by the [Contributing Guidelines](./CONTRIBUTING.md).
+
+NOTE 2: Please abide by the [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+## Starware
+
+<hr>
+
+This project is Starware.  
+This means you're free to use the project, as long as you star its GitHub repository.  
+Your appreciation makes us grow and glow up. ⭐

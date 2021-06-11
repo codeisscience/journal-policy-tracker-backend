@@ -51,7 +51,7 @@ $ poetry run python run.py
 <h2 align="center">Contribute to this project</h2>
 <hr>
 
-Our Slack Community: [Slack Invite](https://join.slack.com/t/codeisscience/shared_invite/zt-ia30nh6t-cgGvNpYAaWHZsg9HvmuHTQ) <br>
+Our Slack Community: [Slack Invite](https://join.slack.com/t/codeisscience/shared_invite/zt-ia30nh6t-cgGvNpYAaWHZsg9HvmuHTQ)
 
 `Contributions are welcome 🎉🎉`
 

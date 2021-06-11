@@ -71,7 +71,7 @@ NOTE 2: Please abide by the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## Starware
 
-<hr>
+---
 
 This project is Starware.  
 This means you're free to use the project, as long as you star its GitHub repository.  

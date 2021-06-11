@@ -9,12 +9,13 @@
 
 ### Database Schema Design for the Journal Policy Tracker can be found [here](https://github.com/codeisscience/code-is-science/issues/62#issuecomment-686518507)
 
-<h2 align="center">Local Environment Setup</h2>
-<hr>
+## Local Environment Setup
+
+---
 
 ### Installing dependencies
 
-<h3 align="center" style="font-weight: 800; color: cyan;">Poetry</h3>
+### Poetry
 
 After cloning this repo, you can use
 [Poetry](https://python-poetry.org/docs/#installation) to create the virtual
@@ -27,14 +28,14 @@ to leave the shell/virtualenv):
 $ poetry shell
 ```
 
-> Then, install the dependencies:
+Then, install the dependencies:
 
 ```console
 $ poetry install
 ```
 
-> If installation succeeds, you should be able to see the current installed Flask
-> version:
+If installation succeeds, you should be able to see the current installed Flask
+version:
 
 ```console
 $ flask --version
@@ -42,14 +43,15 @@ $ flask --version
 
 ### Running
 
-> To run the flask application:
+To run the flask application:
 
 ```console
-$ poetry run python run.py
+$ poetry run python -m codecompl
 ```
 
-<h2 align="center">Contribute to this project</h2>
-<hr>
+## Contribute to this project
+
+---
 
 Our Slack Community: [Slack Invite](https://join.slack.com/t/codeisscience/shared_invite/zt-ia30nh6t-cgGvNpYAaWHZsg9HvmuHTQ)
 

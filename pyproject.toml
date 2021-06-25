@@ -6,7 +6,7 @@ authors = ["João Paulo Taylor Ienczak Zanette <jpaulotiz@gmail.com>"]
 license = "mit"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8.1"
 Flask = "^1.1.2"
 gunicorn = "^20.1.0"
 

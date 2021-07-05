@@ -8,13 +8,9 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///journals.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-
-def create_db():
-    db = SQLAlchemy(app)
-    return db
-
-
+db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+
 
 from .routes import journal

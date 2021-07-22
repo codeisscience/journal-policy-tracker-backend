@@ -9,6 +9,11 @@ license = "mit"
 python = "^3.8.1"
 Flask = "^1.1.2"
 gunicorn = "^20.1.0"
+Flask-Login = "^0.5.0"
+Flask-Bcrypt = "^0.7.1"
+Flask-SQLAlchemy = "^2.5.1"
+Flask-WTF = "^0.15.1"
+WTForms = "^2.3.3"
 
 [tool.poetry.dev-dependencies]
 

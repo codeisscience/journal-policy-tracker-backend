@@ -13,7 +13,6 @@ def display():
     for user in users:
         user_data = {}
         user_data["id"] = user.id
-        user_data["public_id"] = user.public_id
         user_data["username"] = user.username
         user_data["email"] = user.email
         output.append(user_data)
@@ -21,6 +20,7 @@ def display():
     return jsonify({"users": output})
 
 
+# Login Endpoint
 @app.route("/users/login", methods=["GET", "POST"])
 def login():
     body = request.json
@@ -45,7 +45,7 @@ def login():
     if bcrypt.check_password_hash(user.password, body["password"]):
         token = jwt.encode(
             {
-                "public_id": user.public_id,
+                "id": user.id,
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
             },
             app.config["SECRET_KEY"],
@@ -75,7 +75,7 @@ def signup():
             email = body["email"]
             hashed_password = bcrypt.generate_password_hash(password)
             user = User(
-                public_id=str(uuid.uuid4()),
+                id=str(uuid.uuid4()),
                 username=username,
                 password=hashed_password,
                 email=email,

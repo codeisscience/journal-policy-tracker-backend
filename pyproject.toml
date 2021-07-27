@@ -15,6 +15,7 @@ Flask-SQLAlchemy = "^2.5.1"
 Flask-WTF = "^0.15.1"
 WTForms = "^2.3.3"
 PyJWT = "^2.1.0"
+python-dotenv = "^0.19.0"
 
 [tool.poetry.dev-dependencies]
 

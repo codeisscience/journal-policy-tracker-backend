@@ -60,7 +60,7 @@ def login():
 @app.route("/users/register", methods=["POST"])
 def signup():
     """
-    We would be expecting a request body of this type:
+    This route expected a JSON request body on the format:
     {
         'username' : "abc",
         'password': "abc",
@@ -94,5 +94,6 @@ def signup():
             )
     except:
         current_app.logger.error("<REGISTRATION> Unable to parse POST request.")
+        raise
 
     return make_response("Wrong parameters. Try again", 400)

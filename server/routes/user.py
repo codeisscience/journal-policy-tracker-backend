@@ -60,7 +60,7 @@ def login():
 @app.route("/users/register", methods=["POST"])
 def signup():
     """
-    This route expected a JSON request body on the format:
+    This route expectes a JSON request body on the format:
     {
         'username' : "abc",
         'password': "abc",

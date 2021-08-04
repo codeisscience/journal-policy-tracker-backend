@@ -23,7 +23,7 @@ def root():
         <ul>
             <li><a href="/api/journals">Journal listing </a> at /api/journals (WIP)</li>
             <li><a href="/users/login">User Login </a> at /users/login (WIP)</li>
-            <li><a href="/users/signup">User Signup </a> at /users/signup (WIP)</li>
+            <li><a href="/users/register">User Signup </a> at /users/register (WIP)</li>
         </ul>
     """
     )

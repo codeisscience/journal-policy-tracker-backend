@@ -9,17 +9,6 @@ from flask_login import LoginManager, login_manager
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-if SECRET_KEY is None:
-    sys.exit(
-        dedent(
-            """
-        SECRET_KEY is not set. Hint: create a .env file containing:
-        SECRET_KEY=<randomly generated key>
-        To generate a key, see https://flask.palletsprojects.com/en/latest/config/#SECRET_KEY.
-    """
-        ).strip()
-    )
-
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = SECRET_KEY

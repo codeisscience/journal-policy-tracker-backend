@@ -1,4 +1,6 @@
-from server import app
+from flask import jsonify, request
+from server import app, db
+from server.models.Journal import Journal
 from textwrap import dedent
 
 
@@ -36,6 +38,20 @@ def list_journals():
     #       - ?keywords=a,b      (comma-separated keyword list)
     #       - ?keywordcat=code   (specific keyword category)
     return STUB_PAGE_MESSAGE
+
+
+@app.route("/api/journals", methods=["POST"])
+def add_journals():
+    body = request.json
+    if body:
+        issn = body["issn"]
+        title = body["title"]
+        url = body["url"]
+        journal = Journal(issn=issn, title=title, url=url)
+
+        db.session.add(journal)
+        db.session.commit()
+    return body
 
 
 @app.route("/api/journals/<identifier>", methods=["GET"])

@@ -22,6 +22,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
+db.create_all()
 
 from .routes import journal
 

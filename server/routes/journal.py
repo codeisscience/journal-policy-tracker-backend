@@ -1,6 +1,7 @@
-from flask import jsonify, request
+from os import name
+from flask import jsonify, request, make_response
 from server import app, db
-from server.models.Journal import Journal
+from server.models.Journal import Journal, Rating, Policies, Domain
 from textwrap import dedent
 
 
@@ -47,11 +48,32 @@ def add_journals():
         issn = body["issn"]
         title = body["title"]
         url = body["url"]
-        journal = Journal(issn=issn, title=title, url=url)
+        rating = body["rating"]
+        journal = Journal(issn=issn, title=title, url=url, ratings=rating)
+
+        policies = body["policies"]
+        for policy in policies:
+            policy_title = policy["title"]
+            first_year = policy["first_year"]
+            last_year = policy["last_year"]
+            policy_type = policy["policy_type"]
+            policy_to_add = Policies(
+                issn=issn,
+                title=policy_title,
+                first_year=first_year,
+                last_year=last_year,
+                policy_type=policy_type,
+            )
+            db.session.add(policy_to_add)
+
+        domain = body["domain"]
+        journal_domain = Domain(issn=issn, name=domain)
+        db.session.add(journal_domain)
 
         db.session.add(journal)
         db.session.commit()
-    return body
+
+    return jsonify({"message": "Journal added successfully!", "status": 200}, body)
 
 
 @app.route("/api/journals/<identifier>", methods=["GET"])

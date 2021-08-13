@@ -16,6 +16,7 @@ Flask-WTF = "^0.15.1"
 WTForms = "^2.3.3"
 PyJWT = "^2.1.0"
 python-dotenv = "^0.19.0"
+Flask-Cors = "^3.0.10"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.7b0", allow-prereleases = true}

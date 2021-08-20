@@ -45,6 +45,7 @@ def list_journals():
 
 
 @app.route("/api/journals", methods=["POST"])
+@cross_origin()
 def add_journals():
     body = request.json
     if body:

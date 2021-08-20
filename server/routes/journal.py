@@ -37,11 +37,26 @@ def root():
 @app.route("/api/journals", methods=["GET"])
 @cross_origin()
 def list_journals():
-    """Lists journals. May receive filters in query parameters."""
-    # TODO: Use `flask.requests.args` to fetch parameters for:
-    #       - ?keywords=a,b      (comma-separated keyword list)
-    #       - ?keywordcat=code   (specific keyword category)
-    return STUB_PAGE_MESSAGE
+    journals = Journal.query.all()
+    res = []
+
+    for journal in journals:
+        issn = journal.issn
+        policy = Policies.query.filter_by(issn=issn)
+        domain = Domain.query.filter_by(issn=issn).first()
+        data = {
+            "issn": issn,
+            "title": journal.title,
+            "url": journal.url,
+            "rating": journal.ratings,
+            "policy_title": policy[0].title,
+            "first_year": policy[0].first_year,
+            "last_year": policy[0].last_year,
+            "policy_type": policy[0].policy_type,
+            "domain": domain.name,
+        }
+        res.append(data)
+    return jsonify({"data": res, "message": "Journal details fetched successfully."})
 
 
 @app.route("/api/journals", methods=["POST"])

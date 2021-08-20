@@ -56,7 +56,12 @@ def list_journals():
             "domain": domain.name,
         }
         res.append(data)
-    return jsonify({"data": res, "message": "Journal details fetched successfully."})
+    return jsonify(
+        {
+            "data": res,
+            "message": "Journal details fetched successfully. The data field in the response will have the list of journals.",
+        }
+    )
 
 
 @app.route("/api/journals", methods=["POST"])

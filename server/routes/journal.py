@@ -1,5 +1,6 @@
 from os import name
 from flask import jsonify, request, make_response
+from flask.helpers import send_from_directory
 from server import app, db
 from server.models.Journal import Journal, Rating, Policies, Domain
 from textwrap import dedent
@@ -112,3 +113,8 @@ def list_journal(identifier):
 def list_journal_policies():
     """Lists the policies from a journal."""
     return STUB_PAGE_MESSAGE
+
+
+@app.route("/static/<path:path>")
+def send_static(path):
+    return send_from_directory("static", path)

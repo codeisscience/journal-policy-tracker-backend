@@ -1,0 +1,84 @@
+{
+ "openapi": "3.0.0",
+  "info": {
+    "description": "Journal Policy Tracker Backend",
+    "version": "1.0.0",
+    "title": "REST API Documentation for the Journal Policy APIs",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+   {
+    "url": "/"
+   }
+  ],
+  "components": {
+   "schemas": {
+     "User": {
+       "properties": {
+         "username": {
+           "type": "String"
+         },
+         "email": {
+           "type": "Text"
+         },
+         "password": {
+           "type": "Text"
+         }
+       }
+     },
+     "Journal": {
+       "type": "object",
+       "properties": {
+         "title": {
+           "type": "string"
+         },
+         "url": {
+          "type": "String"
+         },
+         "issn": {
+          "type": "Integer"
+         }
+       }
+     },
+     "Rating": {
+       "type": "object",
+       "properties": {
+         "rating": {
+           "type": "Integer"
+         },
+         "date": {
+           "type": "DateTime"
+         }
+       }
+     },
+     "Policies": {
+       "type": "object",
+       "properties": {
+        "issn": {
+          "type": "Integer"
+        },
+        "title": {
+          "type": "String"
+        },
+        "first_year": {
+          "type": "Integer"
+        },
+        "last_year": {
+          "type": "Integer"
+        }
+       }
+     },
+     "Domain": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "String"
+       }
+      }
+     }
+   }
+ }
+}

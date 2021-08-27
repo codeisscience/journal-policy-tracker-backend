@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_manager
+from flask_swagger_ui import get_swaggerui_blueprint
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -22,7 +23,13 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
-db.create_all()
+# Swagger UI
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL, API_URL, config={"app_name": "Journal Policy Tracker Server"}
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 from .routes import journal
 

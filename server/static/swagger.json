@@ -14,32 +14,324 @@
     "url": "/"
    }
   ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": [
+          "User Authentication APIs"
+        ],
+        "summary": "Add a new user to the database",
+        "requestBody": {
+          "description": "Add New User Post Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "username": "John Doe",
+                "email": "john@gmail.com",
+                "password": "<password>"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Registration Successful!"
+          },
+          "400": {
+            "description": "Wrong parameters. Try again"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "User Authentication APIs"
+        ],
+        "summary": "Login User API",
+        "requestBody": {
+          "description": "Fetch User Details for Login",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "email": "john@gmail.com",
+                "password": "<password>"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login Successful!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/journals": {
+      "get": {
+        "tags": [
+          "Journal APIs - CRUD Operations"
+        ],
+        "summary": "Returns all the journals",
+        "responses": {
+          "200": {
+            "description": "Journal details fetched successfully. The data field in the response will have the list of journals.",
+            "schema": {
+              "$ref": "#/components/schemas/Journal"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Journal APIs - CRUD Operations"
+        ],
+        "summary": "Add a new Journal",
+        "requestBody": {
+          "description": "Add Journal Request Post Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Journal"
+              },
+              "example": {
+                "id": "123e4567-e89b-12d3-a456-426614174000",
+                "title": "Sample Journal Title",
+                "url": "https://samplejournalurl.com",
+                "issn": "20493630",
+                "rating": "3",
+                "date": "12/06/2018",
+                "policies": [
+                    {
+                        "title": "Title 1",
+                        "first_year": "first_year",
+                        "last_year": "last_year",
+                        "policy_type": "Enforcement"
+                    },
+                    {
+                        "title": "Title 2",
+                        "first_year": "first_year",
+                        "last_year": "last_year",
+                        "policy_type": "Enforcement"
+                    }
+                ],
+                "domain": "Open Source"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Journal added successfully!"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "200"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/journal/{issn}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ISSN number of the journal that we want to fetch",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Journal APIs - CRUD Operations"
+        ],
+        "summary": "Get journal request with given ISSN number",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ISSN number of the journal",
+            "schema": {
+              "$ref": "#/components/schemas/id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Journal"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Journal not found."
+          }
+        }
+      },
+      "put": {
+        "summary": "edit a journal request by ISSN number",
+        "tags": [
+          "Journal APIs - CRUD Operations"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Journal Request ISSN number",
+            "schema": {
+              "$ref": "#/components/schemas/id"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Journal Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Journal"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Journal"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Journal Request by ISSN number",
+        "tags": [
+          "Journal APIs - CRUD Operations"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Journal Request ISSN number",
+            "schema": {
+              "$ref": "#/components/schemas/id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/id"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Book Request not found."
+          }
+        }
+      }
+    }
+  },
   "components": {
    "schemas": {
+     "id": {
+      "properties": {
+        "issn": {
+          "type": "integer",
+          "example": "20493630"
+        }
+      }
+     },
      "User": {
        "properties": {
          "username": {
-           "type": "String"
+           "type": "string"
          },
          "email": {
-           "type": "Text"
+           "type": "string"
          },
          "password": {
-           "type": "Text"
+           "type": "string"
          }
        }
      },
      "Journal": {
        "type": "object",
        "properties": {
+         "id": {
+          "type": "string"
+         },
          "title": {
            "type": "string"
          },
          "url": {
-          "type": "String"
+          "type": "string"
          },
          "issn": {
-          "type": "Integer"
+          "type": "integer"
          }
        }
      },

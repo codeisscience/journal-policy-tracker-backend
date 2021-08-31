@@ -33,4 +33,3 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 from .routes import journal
 
-db.create_all()

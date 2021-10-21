@@ -9,6 +9,15 @@
 
 ### Database Schema Design for the Journal Policy Tracker can be found [here](https://github.com/codeisscience/code-is-science/issues/62#issuecomment-686518507)
 
+## Tech Stack used
+- [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+- [SQLite3](https://docs.python.org/3/library/sqlite3.html)
+- [Poetry Package Manager](https://python-poetry.org/)
+- [Heroku](https://www.heroku.com/)
+- [GitHub Actions](https://github.com/features/actions)
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+- [Jinja](https://jinja.palletsprojects.com/en/3.0.x/)
+
 ## Local Environment Setup
 
 ---

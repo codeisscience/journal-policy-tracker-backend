@@ -114,7 +114,3 @@ def list_journal_policies():
     """Lists the policies from a journal."""
     return STUB_PAGE_MESSAGE
 
-
-@app.route("/static/<path:path>")
-def send_static(path):
-    return send_from_directory("static", path)

@@ -1,5 +1,5 @@
 # Project custom
-journals.db
+# journals.db
 
 .vscode
 poetry.toml

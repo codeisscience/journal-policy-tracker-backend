@@ -33,7 +33,8 @@ body:
       label: Expected behaviour
       description: Explain what you should expect to happen.
       placeholder: |
-        Example: "This is the expected behaviour from it."
+        Example: "It was expected that <X> happened."
+        Or "Data returned should be in format <Y>."
     validations:
       required: true
   

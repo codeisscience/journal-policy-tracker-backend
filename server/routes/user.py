@@ -1,14 +1,22 @@
-import datetime, uuid, jwt
-from server import app, bcrypt, db
-from server.models.User import User
-from flask import jsonify, request, make_response, current_app
-from textwrap import dedent
+"""Route handlers/endpoints for user-related operations."""
+import datetime
+import uuid
+
+import jwt
+from flask import current_app, jsonify, make_response, request
 from flask_cors import cross_origin
 
-# Just for development purpose i.e. to display all users in the database
+from server.app import app, bcrypt, db
+from server.models.user import User
+
+
 @app.route("/users/display", methods=["GET"])
 @cross_origin()
 def display():
+    """
+    Displays all users registered.
+    Just for development purpose i.e. to display all users in the database.
+    """
     users = User.query.all()
     output = []
 
@@ -22,10 +30,13 @@ def display():
     return jsonify({"users": output})
 
 
-# Login Endpoint
 @app.route("/users/login", methods=["GET", "POST"])
 @cross_origin()
 def login():
+    """
+    Attempts to login a user. If succeeded, the response shall contain a token
+    to handle user session.
+    """
     body = request.json
     # return jsonify({"user": auth})
 
@@ -81,26 +92,26 @@ def signup():
 
             check_user = User.query.filter_by(email=body["email"]).first()
 
-            if not check_user:
-                user = User(
-                    id=str(uuid.uuid4()),
-                    username=username,
-                    password=hashed_password,
-                    email=email,
-                )
-                db.session.add(user)
-                db.session.commit()
-
-                current_app.logger.info(
-                    f"<AUTH> Adding new user: {user.username}, email: {user.email}"
-                )
-                return make_response(
-                    "Registration Successful!".format(user.username),
-                    201,
-                )
-            else:
+            if check_user:
                 return make_response("User already registered! Please sign in.", 409)
-    except:
+
+            user = User(
+                id=str(uuid.uuid4()),
+                username=username,
+                password=hashed_password,
+                email=email,
+            )
+            db.session.add(user)
+            db.session.commit()
+
+            current_app.logger.info(
+                f"<AUTH> Adding new user: {user.username}, email: {user.email}"
+            )
+            return make_response(
+                f"Successfully registered user {user.username}!",
+                201,
+            )
+    except ValueError:
         current_app.logger.error("<REGISTRATION> Unable to parse POST request.")
         raise
 

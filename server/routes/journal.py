@@ -1,11 +1,11 @@
-from os import name
-from flask import jsonify, request, make_response
-from flask.helpers import send_from_directory
-from server import app, db
-from server.models.Journal import Journal, Rating, Policies, Domain
+"""Route handlers/endpoints for journal-related operations."""
 from textwrap import dedent
+
+from flask import jsonify, request
 from flask_cors import cross_origin
 
+from server.app import app, db
+from server.models.journal import Domain, Journal, Policies
 
 STUB_PAGE_MESSAGE = dedent(
     """
@@ -21,6 +21,7 @@ STUB_PAGE_MESSAGE = dedent(
 @app.route("/", methods=["GET"])
 @cross_origin()
 def root():
+    """Root endpoint. Returns plain HTML information."""
     return dedent(
         """
         <h1> Welcome to Code Compliance Backend Server</h1>
@@ -38,6 +39,7 @@ def root():
 @app.route("/api/journals", methods=["GET"])
 @cross_origin()
 def list_journals():
+    """Lists all info from journals registered on database."""
     journals = Journal.query.all()
     res = []
 
@@ -60,7 +62,10 @@ def list_journals():
     return jsonify(
         {
             "data": res,
-            "message": "Journal details fetched successfully. The data field in the response will have the list of journals.",
+            "message": (
+                "Journal details fetched successfully."
+                "The data field in the response will have the list of journals."
+            ),
         }
     )
 
@@ -68,6 +73,7 @@ def list_journals():
 @app.route("/api/journals", methods=["POST"])
 @cross_origin()
 def add_journals():
+    """Adds a single journal to the database."""
     body = request.json
     if body:
         issn = body["issn"]
@@ -105,7 +111,14 @@ def add_journals():
 @cross_origin()
 def list_journal(identifier):
     """Lists general information from a journal, including its domains"""
-    return STUB_PAGE_MESSAGE
+    return dedent(
+        f"""
+        {STUB_PAGE_MESSAGE}.
+
+        Params:
+            identifier: {identifier}
+    """
+    )
 
 
 @app.route("/api/journals/<identifier>/policies", methods=["GET"])
@@ -113,4 +126,3 @@ def list_journal(identifier):
 def list_journal_policies():
     """Lists the policies from a journal."""
     return STUB_PAGE_MESSAGE
-

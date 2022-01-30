@@ -1,0 +1,33 @@
+name: Linting
+
+on: [push]
+
+jobs:
+  full-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install poetry
+        run: pip install --user poetry
+      - name: Install dependencies
+        run: poetry install
+      - name: Mypy
+        if: always()
+        run: poetry run mypy --ignore-missing-imports .
+      - name: Black
+        if: always()
+        run: poetry run black --check --diff .
+      - name: isort
+        if: always()
+        run: poetry run isort --check --diff .
+      - name: Pylint
+        if: always()
+        run: |
+          poetry run pylint codecompl
+          poetry run pylint server

@@ -11,6 +11,11 @@ repos:
         entry: poetry run black --check --diff --target-version py39
         language: system
         types: [python]
+      - id: isort
+        name: isort
+        entry: poetry run isort --check --diff
+        language: system
+        types: [python]
       - id: pylint
         name: pylint
         entry: poetry run pylint

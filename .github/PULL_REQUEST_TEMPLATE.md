@@ -22,10 +22,8 @@ Please describe the tests that you ran to verify that your changes did not broke
 
 **Test Configuration**:
 
-* Firmware version:
-* Hardware:
-* Toolchain:
-* SDK:
+* Python version:
+* Poetry version:
 
 # Checklist:
 

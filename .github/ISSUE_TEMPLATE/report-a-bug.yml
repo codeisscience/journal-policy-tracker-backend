@@ -1,0 +1,73 @@
+name: Report bug
+description: Report a bug in journal-policy-tracker-backend.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an journal-policy-tracker-backend bug! Fill out the form below to provide us with info to help fix the bug.
+        Only use this if you're 100% sure you've found a bug and can reproduce it.
+
+  - type: textarea
+    attributes:
+      label: Bug description
+      description: Describe roughly what the bug is here.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Provide an example of how to trigger the bug.
+      placeholder: |
+        Example:
+        1. do this 
+        2. after this do that
+        3. you get the gist...right?
+    validations:
+      required: true
+  
+  - type: textarea
+    attributes:
+      label: Expected behaviour
+      description: Explain what you should expect to happen.
+      placeholder: |
+        Example: "It was expected that <X> happened."
+        Or "Data returned should be in format <Y>."
+    validations:
+      required: true
+  
+  - type: textarea
+    attributes:
+      label: Actual behaviour
+      description: Explain what actually happens.
+      placeholder: |
+        Example: "But in place of this it does that, or it doesn't do this at all."
+    validations:
+      required: true
+  
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output(if applicable)
+      description: If you are reporting a console error, please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks..
+      placeholder: "Logs here please."
+      render: shell
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Prerequisites
+      description: Check these boxes out before filing a bug.
+      options:
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/codeisscience/journal-policy-tracker-backend/blob/master/CODE_OF_CONDUCT.md).
+          required: true
+        - label: I have read the [Contributing Guidelines](https://github.com/codeisscience/journal-policy-tracker-backend/blob/master/CONTRIBUTING.md).
+          required: true
+        - label: I checked the documentation and found no answer.
+          required: true
+        - label: I checked to make sure that this bug has not already been filed.
+          required: true
+        - label: I'm reporting the bug to the correct repository.
+          required: true

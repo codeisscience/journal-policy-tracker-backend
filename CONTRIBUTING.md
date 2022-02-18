@@ -20,7 +20,8 @@ We're in early stages of the project, so any reasonable choice of language that 
 ### What you'll get
 Eternal gratitude, free stickers ([email me](mailto:yochannah@gmail.com) if you want stickers, especially if you've made a contribution :heart:), your avatar in our contributers page, and the eternal smug glow of having contributed to an open source project. <3
 
-
+## Please be patient
+Code is Science is run by a community of volunteers. It may take us a few days to review your contributions of questions and we're grateful for your patience whilst this happens around our day jobs and our family life. That said, sometimes we do need a nudge. If we haven't responded after seven days to a Pull Request or an Issue or comment, it's fine to nudge us for more attention. 🌷
 
 ## Financial contributions
 

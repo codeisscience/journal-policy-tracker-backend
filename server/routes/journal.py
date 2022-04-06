@@ -101,12 +101,29 @@ def add_journals():
     return jsonify({"message": "Journal added successfully!", "status": 200}, body)
 
 
-@app.route("/api/journals/<identifier>", methods=["GET"])
+@app.route("/api/journals/<issn>", methods=["GET"])
 @cross_origin()
-def list_journal(identifier):
+def get_journal_by_issn(issn):
     """Lists general information from a journal, including its domains"""
-    return STUB_PAGE_MESSAGE
-
+    journal = Journal.query.filter(Journal.issn == issn).one_or_none()
+    res = []
+    issn = journal.issn
+    policy = Policies.query.filter_by(issn=issn)
+    domain = Domain.query.filter_by(issn=issn).first()
+    data = {
+            "issn": issn,
+            "title": journal.title,
+            "url": journal.url,
+            "rating": journal.ratings,
+            "policy_title": policy[0].title,
+            "first_year": policy[0].first_year,
+            "last_year": policy[0].last_year,
+            "policy_type": policy[0].policy_type,
+            "domain": domain.name,
+        }
+    res.append(data)
+    return jsonify({"message": "Journal found","status": 200, "data": res})
+    
 
 @app.route("/api/journals/<identifier>/policies", methods=["GET"])
 @cross_origin()

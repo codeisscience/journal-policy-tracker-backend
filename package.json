@@ -1,0 +1,34 @@
+{
+  "name": "journal-policy-tracker-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d-e-v-esh/journal-policy-tracker-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d-e-v-esh/journal-policy-tracker-backend/issues"
+  },
+  "homepage": "https://github.com/d-e-v-esh/journal-policy-tracker-backend#readme",
+  "dependencies": {
+    "@graphql-tools/merge": "^8.2.14",
+    "apollo-server-express": "^3.8.2",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "mongoose": "^6.3.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.2",
+    "@babel/node": "^7.17.10",
+    "@babel/preset-env": "^7.18.2",
+    "nodemon": "^2.0.16"
+  }
+}

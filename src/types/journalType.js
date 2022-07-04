@@ -1,24 +1,52 @@
 import { gql } from "apollo-server-express";
 
 const journalType = gql`
+  type Policies {
+    title: String!
+    firstYear: Int!
+    lastYear: Int
+    policyType: String!
+  }
+
+  input PoliciesInput {
+    title: String!
+    firstYear: Int!
+    lastYear: Int
+    policyType: String!
+  }
+
   type Journal {
     id: ID
     title: String!
     url: String!
     issn: Int!
-    domain: String!
+    domainName: String!
+    policies: Policies!
+    createdAt: String
+    updatedAt: String
+    createdBy: String
   }
+
   input JournalInput {
     title: String!
     url: String!
     issn: Int!
-    domain: String!
+    domainName: String!
+    policies: PoliciesInput!
   }
+
   type Query {
-    getAllJournals: [Journal]!
+    getAllJournals: [Journal]
+    getJournalByISSN(issn: Int): Journal
   }
+
   type Mutation {
     createJournal(journal: JournalInput!): Journal!
+    deleteJournal(issnToDelete: Int!): String!
+    updateJournal(
+      issnToUpdate: Int!
+      newJournalDetails: JournalInput!
+    ): Journal!
   }
 `;
 

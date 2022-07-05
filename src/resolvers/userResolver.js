@@ -1,5 +1,8 @@
 import { User } from "../models/User";
 import validator from "validator";
+import bcrypt from "bcrypt";
+
+const saltRounds = 12;
 
 const userResolver = {
   Query: {
@@ -11,10 +14,20 @@ const userResolver = {
     register: async (_, { userInfo }) => {
       const { fullName, username, password, email } = userInfo;
 
-      const user = new User({ fullName, username, password, email });
+      let user;
 
       try {
-        await user.save();
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        user = new User({
+          fullName,
+          username,
+          email,
+          password: hashedPassword,
+          createdAt: new Date(),
+        });
+
+        const insertedUser = await user.save();
       } catch (error) {
         if (
           error.code === 11000 &&
@@ -57,7 +70,9 @@ const userResolver = {
         };
       }
 
-      if (user.password != password) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
         return {
           errors: [
             {
@@ -67,6 +82,7 @@ const userResolver = {
           ],
         };
       }
+
       return { user };
     },
   },

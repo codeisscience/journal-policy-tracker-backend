@@ -22,6 +22,7 @@ const userSchema = new Schema({
   },
   createdAt: {
     type: Date,
+    required: true,
   },
   journals: [
     {

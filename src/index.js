@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from "apollo-server-express";
+import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import resolvers from "./resolvers";
@@ -16,10 +17,13 @@ const startServer = async () => {
 
   server.applyMiddleware({ app });
 
-  await mongoose.connect("mongodb://localhost:27017/testMongo");
+  mongoose.connect(process.env.DATABASE_URL);
 
-  app.listen({ port: 4000 }, () => {
-    console.log(`GraphQL path is http://localhost:4000${server.graphqlPath}`);
+  console.log(process.env.PORT);
+  app.listen({ port: process.env.PORT }, () => {
+    console.log(
+      `GraphQL path is http://localhost:${process.env.PORT}${server.graphqlPath}`
+    );
   });
 };
 

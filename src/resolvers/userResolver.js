@@ -10,6 +10,7 @@ const userResolver = {
       return await User.find();
     },
   },
+
   Mutation: {
     register: async (_, { userInfo }) => {
       const { fullName, username, password, email } = userInfo;

@@ -31,6 +31,7 @@ const userType = gql`
   }
 
   type Query {
+    me: User
     getAllUsers: [User]
   }
 

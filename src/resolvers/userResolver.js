@@ -6,7 +6,7 @@ const saltRounds = 12;
 
 const userResolver = {
   Query: {
-    me: async (_, _args, { req }) => {
+    getCurrentUser: async (_, _args, { req }) => {
       if (!req.session.userId) {
         return null;
       }

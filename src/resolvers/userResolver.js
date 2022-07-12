@@ -6,12 +6,20 @@ const saltRounds = 12;
 
 const userResolver = {
   Query: {
+    getCurrentUser: async (_, _args, { req }) => {
+      if (!req.session.userId) {
+        return null;
+      }
+
+      return User.findOne({ _id: req.session.userId });
+    },
     getAllUsers: async () => {
       return await User.find();
     },
   },
+
   Mutation: {
-    register: async (_, { userInfo }) => {
+    register: async (_, { userInfo }, { req }) => {
       const { fullName, username, password, email } = userInfo;
 
       let user;
@@ -46,10 +54,11 @@ const userResolver = {
         }
       }
 
+      req.session.userId = user.id;
       return { user };
     },
 
-    login: async (_, { userInfo }) => {
+    login: async (_, { userInfo }, { req }) => {
       const { usernameOrEmail, password } = userInfo;
 
       let user;
@@ -83,6 +92,7 @@ const userResolver = {
         };
       }
 
+      req.session.userId = user.id;
       return { user };
     },
   },

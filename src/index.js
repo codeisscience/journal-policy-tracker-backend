@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
@@ -8,6 +8,9 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
 import cors from "cors";
+import { applyMiddleware } from "graphql-middleware";
+import { authMiddleware } from "./middlewares/authMiddleware";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 const startServer = async () => {
   const app = express();
@@ -53,8 +56,10 @@ const startServer = async () => {
   );
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema: applyMiddleware(
+      makeExecutableSchema({ typeDefs, resolvers }),
+      authMiddleware
+    ),
     context: ({ req, res }) => ({ req, res, redis }),
   });
 

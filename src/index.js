@@ -11,6 +11,7 @@ import cors from "cors";
 import { applyMiddleware } from "graphql-middleware";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { COOKIE_NAME } from "./constants";
 
 const startServer = async () => {
   const app = express();
@@ -38,7 +39,7 @@ const startServer = async () => {
 
   app.use(
     session({
-      name: "obfc",
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redis,
         disableTouch: true,

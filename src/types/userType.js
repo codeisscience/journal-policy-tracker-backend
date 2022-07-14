@@ -38,6 +38,7 @@ const userType = gql`
   type Mutation {
     register(userInfo: RegisterInput!): UserResponse!
     login(userInfo: LoginInput!): UserResponse!
+    logout: Boolean!
   }
 `;
 

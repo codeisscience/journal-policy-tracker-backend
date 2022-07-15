@@ -52,7 +52,7 @@ const journalType = gql`
 
   type Mutation {
     createJournal(journalToCreate: JournalInput!): JournalResponse!
-    deleteJournal(issnToDelete: Int!): String!
+    deleteJournal(issnToDelete: Int!): Boolean!
     updateJournal(
       issnToUpdate: Int!
       newJournalDetails: JournalInput!

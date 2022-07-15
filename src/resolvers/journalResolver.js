@@ -28,12 +28,18 @@ const journalResolver = {
     },
 
     deleteJournal: async (_, { issnToDelete }) => {
-      await Journal.deleteOne({ issn: issnToDelete });
-      return "Journal Deleted";
+      const { deletedCount } = await Journal.deleteOne({ issn: issnToDelete });
+
+      if (deletedCount === 0) {
+        return false;
+      }
+
+      return true;
     },
 
     updateJournal: async (_, { issnToUpdate, newJournalDetails }) => {
       const { _id } = await Journal.findOne({ issn: issnToUpdate });
+
       try {
         await Journal.updateOne({ _id }, { ...newJournalDetails });
       } catch (error) {

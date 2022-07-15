@@ -13,9 +13,18 @@ const journalResolver = {
 
   Mutation: {
     createJournal: async (_, { journalToCreate }) => {
-      const journal = new Journal({ ...journalToCreate });
-      await journal.save();
-      return journal;
+      let journal;
+      try {
+        journal = new Journal({ ...journalToCreate });
+        await journal.save();
+      } catch (error) {
+        if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
+          return {
+            errors: [{ field: "issn", message: "issn already exists" }],
+          };
+        }
+      }
+      return { journal };
     },
 
     deleteJournal: async (_, { issnToDelete }) => {

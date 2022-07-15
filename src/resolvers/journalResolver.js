@@ -34,8 +34,19 @@ const journalResolver = {
 
     updateJournal: async (_, { issnToUpdate, newJournalDetails }) => {
       const { _id } = await Journal.findOne({ issn: issnToUpdate });
-      await Journal.updateOne({ _id }, { ...newJournalDetails });
-      return await Journal.findOne({ _id });
+      try {
+        await Journal.updateOne({ _id }, { ...newJournalDetails });
+      } catch (error) {
+        if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
+          return {
+            errors: [{ field: "issn", message: "issn already exists" }],
+          };
+        }
+      }
+
+      const updatedJournal = await Journal.findOne({ _id });
+
+      return { journal: updatedJournal };
     },
   },
 };

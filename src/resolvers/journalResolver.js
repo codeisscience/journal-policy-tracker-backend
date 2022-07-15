@@ -12,9 +12,8 @@ const journalResolver = {
   },
 
   Mutation: {
-    createJournal: async (_, args) => {
-      const { title, url, issn, domainName, policies } = args.journal;
-      const journal = new Journal({ title, url, issn, domainName, policies });
+    createJournal: async (_, { journalToCreate }) => {
+      const journal = new Journal({ ...journalToCreate });
       await journal.save();
       return journal;
     },
@@ -25,12 +24,8 @@ const journalResolver = {
     },
 
     updateJournal: async (_, { issnToUpdate, newJournalDetails }) => {
-      const { title, url, domainName, issn, policies } = newJournalDetails;
       const { _id } = await Journal.findOne({ issn: issnToUpdate });
-      await Journal.updateOne(
-        { _id },
-        { title, url, domainName, issn, policies }
-      );
+      await Journal.updateOne({ _id }, { ...newJournalDetails });
       return await Journal.findOne({ _id });
     },
   },

@@ -22,9 +22,9 @@ const journalType = gql`
     issn: Int!
     domainName: String!
     policies: Policies!
-    createdAt: String
-    updatedAt: String
-    createdBy: String
+    createdAt: String!
+    updatedAt: String!
+    createdBy: String!
   }
 
   input JournalInput {

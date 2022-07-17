@@ -1,4 +1,5 @@
 import { Journal } from "../models/Journal";
+import { User } from "../models/User";
 
 const journalResolver = {
   Query: {
@@ -12,11 +13,22 @@ const journalResolver = {
   },
 
   Mutation: {
-    createJournal: async (_, { journalToCreate }) => {
-      let journal;
+    createJournal: async (_, { journalToCreate }, { req }) => {
       try {
-        journal = new Journal({ ...journalToCreate });
-        await journal.save();
+        const currentUser = await User.findById(req.session.userId);
+
+        const journal = new Journal({
+          createdBy: req.session.userId,
+          ...journalToCreate,
+        });
+
+        const createdJournal = await journal.save();
+
+        currentUser.journals.push(createdJournal.id);
+
+        await currentUser.save();
+
+        return { journal };
       } catch (error) {
         if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
           return {
@@ -24,7 +36,6 @@ const journalResolver = {
           };
         }
       }
-      return { journal };
     },
 
     deleteJournal: async (_, { issnToDelete }) => {

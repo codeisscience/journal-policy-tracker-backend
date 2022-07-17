@@ -12,7 +12,7 @@ const userResolver = {
         return null;
       }
 
-      return User.findOne({ _id: req.session.userId });
+      return await User.findById(req.session.userId);
     },
     getAllUsers: async () => {
       return await User.find();

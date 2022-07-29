@@ -1,6 +1,7 @@
 import { User } from "../models/User";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { COOKIE_NAME } from "../constants";
 
 const saltRounds = 12;
 
@@ -11,7 +12,7 @@ const userResolver = {
         return null;
       }
 
-      return User.findOne({ _id: req.session.userId });
+      return await User.findById(req.session.userId);
     },
     getAllUsers: async () => {
       return await User.find();
@@ -94,6 +95,25 @@ const userResolver = {
 
       req.session.userId = user.id;
       return { user };
+    },
+
+    logout: (_, __, { req, res }) => {
+      return new Promise((resolve) =>
+        req.session.destroy((err) => {
+          res.clearCookie(COOKIE_NAME, {
+            // Cookie options should be changed or removed before we go in prod
+            sameSite: "none",
+            secure: true,
+          });
+          if (err) {
+            console.log(err);
+            resolve(false);
+            return;
+          }
+
+          resolve(true);
+        })
+      );
     },
   },
 };

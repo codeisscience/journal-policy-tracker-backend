@@ -22,9 +22,9 @@ const journalType = gql`
     issn: Int!
     domainName: String!
     policies: Policies!
-    createdAt: String
-    updatedAt: String
-    createdBy: String
+    createdAt: String!
+    updatedAt: String!
+    createdBy: String!
   }
 
   input JournalInput {
@@ -35,18 +35,28 @@ const journalType = gql`
     policies: PoliciesInput!
   }
 
+  type JournalResponse {
+    journal: Journal
+    errors: [Error]
+  }
+
+  type Error {
+    field: String!
+    message: String!
+  }
+
   type Query {
     getAllJournals: [Journal]
     getJournalByISSN(issn: Int): Journal
   }
 
   type Mutation {
-    createJournal(journal: JournalInput!): Journal!
-    deleteJournal(issnToDelete: Int!): String!
+    createJournal(journalToCreate: JournalInput!): JournalResponse!
+    deleteJournal(issnToDelete: Int!): Boolean!
     updateJournal(
       issnToUpdate: Int!
       newJournalDetails: JournalInput!
-    ): Journal!
+    ): JournalResponse!
   }
 `;
 

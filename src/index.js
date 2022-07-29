@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
@@ -8,6 +8,10 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
 import cors from "cors";
+import { applyMiddleware } from "graphql-middleware";
+import { authMiddleware } from "./middlewares/authMiddleware";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { COOKIE_NAME } from "./constants";
 
 const startServer = async () => {
   const app = express();
@@ -35,7 +39,7 @@ const startServer = async () => {
 
   app.use(
     session({
-      name: "obfc",
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redis,
         disableTouch: true,
@@ -53,8 +57,10 @@ const startServer = async () => {
   );
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema: applyMiddleware(
+      makeExecutableSchema({ typeDefs, resolvers }),
+      authMiddleware
+    ),
     context: ({ req, res }) => ({ req, res, redis }),
   });
 

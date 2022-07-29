@@ -20,7 +20,7 @@ const journalSchema = new mongoose.Schema(
 
     domainName: {
       type: String,
-      required: false,
+      required: true,
     },
 
     policies: {

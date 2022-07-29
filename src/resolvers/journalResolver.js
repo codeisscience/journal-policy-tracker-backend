@@ -32,7 +32,12 @@ const journalResolver = {
       } catch (error) {
         if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
           return {
-            errors: [{ field: "issn", message: "issn already exists" }],
+            errors: [
+              {
+                field: "issn",
+                message: "A journal with the same ISSN already exists",
+              },
+            ],
           };
         }
       }
@@ -63,7 +68,12 @@ const journalResolver = {
       } catch (error) {
         if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
           return {
-            errors: [{ field: "issn", message: "new issn already exists" }],
+            errors: [
+              {
+                field: "issn",
+                message: "A journal with the same ISSN already exists",
+              },
+            ],
           };
         }
       }

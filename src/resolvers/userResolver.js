@@ -6,6 +6,19 @@ import { COOKIE_NAME } from "../constants";
 const saltRounds = 12;
 
 const userResolver = {
+  PolicyType: {
+    NUMBER_ONE: "Number One",
+    NUMBER_TWO: "Number Two",
+    NUMBER_THREE: "Number Three",
+    NUMBER_FOUR: "Number Four",
+  },
+
+  Enforced: {
+    YES: "Yes - Before Publication",
+    SOMETIMES: "Sometimes - Post-Publication Audit",
+    NO: "No - Not Enforced",
+  },
+
   Query: {
     getCurrentUser: async (_, _args, { req }) => {
       if (!req.session.userId) {

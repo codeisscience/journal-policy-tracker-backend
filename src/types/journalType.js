@@ -1,25 +1,48 @@
 import { gql } from "apollo-server-express";
 
 const journalType = gql`
+  enum PolicyType {
+    NUMBER_ONE
+    NUMBER_TWO
+    NUMBER_THREE
+    NUMBER_FOUR
+  }
+
+  enum Enforced {
+    YES
+    NO
+    SOMETIMES
+  }
+
   type Policies {
     title: String!
     firstYear: Int!
     lastYear: Int
-    policyType: String!
+    policyType: PolicyType!
+    isDataAvailabilityStatementPublished: Boolean!
+    isDataShared: Boolean!
+    isDataPeerReviewed: Boolean!
+    enforced: Enforced!
+    enforcedEvidence: String!
   }
 
   input PoliciesInput {
     title: String!
     firstYear: Int!
     lastYear: Int
-    policyType: String!
+    policyType: PolicyType!
+    isDataAvailabilityStatementPublished: Boolean!
+    isDataShared: Boolean!
+    isDataPeerReviewed: Boolean!
+    enforced: Enforced!
+    enforcedEvidence: String!
   }
 
   type Journal {
     id: ID
     title: String!
     url: String!
-    issn: Int!
+    issn: String!
     domainName: String!
     policies: Policies!
     createdAt: String!
@@ -30,7 +53,7 @@ const journalType = gql`
   input JournalInput {
     title: String!
     url: String!
-    issn: Int!
+    issn: String!
     domainName: String!
     policies: PoliciesInput!
   }

@@ -69,7 +69,7 @@ const journalType = gql`
   }
 
   type Query {
-    getAllJournals: [Journal]
+    getAllJournals(currentPageNumber: Int!, limitValue: Int!): [Journal]
     getJournalByISSN(issn: Int): Journal
   }
 
@@ -80,6 +80,8 @@ const journalType = gql`
       issnToUpdate: Int!
       newJournalDetails: JournalInput!
     ): JournalResponse!
+
+    addMockJournalData(numberOfJournals: Int!, userId: String!): Boolean
   }
 `;
 

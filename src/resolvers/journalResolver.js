@@ -1,9 +1,10 @@
 import { Journal } from "../models/Journal";
 import { User } from "../models/User";
+import generateMockJournalsArray from "../utils/generateJournalData";
 
 const journalResolver = {
   Query: {
-    getAllJournals: async () => {
+    getAllJournals: async (_, { currentPageNumber, limitValue }) => {
       return await Journal.find();
     },
 
@@ -80,6 +81,27 @@ const journalResolver = {
 
       const updatedJournal = await Journal.findOne({ _id });
       return { journal: updatedJournal };
+    },
+
+    addMockJournalData: async (_, { numberOfJournals, userId }) => {
+      try {
+        const generatedJournals = generateMockJournalsArray(
+          numberOfJournals,
+          userId
+        );
+
+        const journalIds = generatedJournals.map((journal) => journal.id);
+        const user = await User.findById(userId);
+        user.journals.push(...journalIds);
+        await user.save();
+
+        await Journal.insertMany(generatedJournals);
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+
+      return true;
     },
   },
 };

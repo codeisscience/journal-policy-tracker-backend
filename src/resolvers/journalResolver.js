@@ -18,7 +18,8 @@ const journalResolver = {
 
   Query: {
     getAllJournals: async (_, { currentPageNumber, limitValue }) => {
-      return await Journal.find();
+      const skipValue = (currentPageNumber - 1) * limitValue;
+      return await Journal.find().limit(limitValue).skip(skipValue);
     },
 
     getJournalByISSN: async (_, { issn }) => {

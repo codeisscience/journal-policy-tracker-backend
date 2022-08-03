@@ -22,6 +22,24 @@ const journalResolver = {
       return await Journal.find().limit(limitValue).skip(skipValue);
     },
 
+    getAllJournalsByCurrentUser: async (
+      _,
+      { currentPageNumber, limitValue },
+      { req }
+    ) => {
+      const skipValue = (currentPageNumber - 1) * limitValue;
+
+      const currentUser = await User.findById(req.session.userId);
+
+      const allJournalsByCurrentUser = await Journal.find({
+        _id: { $in: currentUser.journals },
+      })
+        .limit(limitValue)
+        .skip(skipValue);
+
+      return allJournalsByCurrentUser;
+    },
+
     getJournalByISSN: async (_, { issn }) => {
       return await Journal.findOne({ issn });
     },

@@ -71,6 +71,10 @@ const journalType = gql`
   type Query {
     getAllJournals(currentPageNumber: Int!, limitValue: Int!): [Journal]
     getJournalByISSN(issn: Int): Journal
+    getAllJournalsByCurrentUser(
+      currentPageNumber: Int!
+      limitValue: Int!
+    ): [Journal]
   }
 
   type Mutation {

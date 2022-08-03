@@ -2,6 +2,7 @@ import { User } from "../models/User";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { COOKIE_NAME } from "../constants";
+import generateMockUsersArray from "../utils/generateUserData";
 
 const saltRounds = 12;
 
@@ -114,6 +115,18 @@ const userResolver = {
           resolve(true);
         })
       );
+    },
+
+    addMockUserData: async (_, { numberOfUsers }) => {
+      try {
+        const generatedUsers = generateMockUsersArray(numberOfUsers);
+        await User.insertMany(generatedUsers);
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+
+      return true;
     },
   },
 };

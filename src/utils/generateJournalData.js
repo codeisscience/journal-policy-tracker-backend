@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
+import { Journal } from "../models/Journal";
 
 const generateMockJournals = (userId) => {
   return {
-    id: faker.database.mongodbObjectId(),
     title: faker.animal.cat(),
     url: faker.internet.url(),
     issn: faker.datatype.number({ min: 10000000, max: 99999999 }),
@@ -27,7 +27,9 @@ const generateMockJournals = (userId) => {
 const generateMockJournalsArray = (numberOfJournals, userId) => {
   const mockJournals = [];
   for (let i = 0; i < numberOfJournals; i++) {
-    mockJournals.push(generateMockJournals(userId));
+    const mockJournal = new Journal(generateMockJournals(userId));
+
+    mockJournals.push(mockJournal);
   }
   return mockJournals;
 };

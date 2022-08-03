@@ -103,13 +103,12 @@ const journalResolver = {
           numberOfJournals,
           userId
         );
+        await Journal.insertMany(generatedJournals);
 
         const journalIds = generatedJournals.map((journal) => journal.id);
         const user = await User.findById(userId);
         user.journals.push(...journalIds);
         await user.save();
-
-        await Journal.insertMany(generatedJournals);
       } catch (error) {
         console.log(error);
         return false;

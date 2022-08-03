@@ -6,6 +6,8 @@ const userType = gql`
     fullName: String!
     username: String!
     email: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input RegisterInput {

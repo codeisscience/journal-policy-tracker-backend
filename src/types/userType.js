@@ -34,7 +34,7 @@ const userType = gql`
 
   type Query {
     getCurrentUser: User
-    getAllUsers: [User]
+    getAllUsers(currentPageNumber: Int!, limitValue: Int!): [User]
   }
 
   type Mutation {

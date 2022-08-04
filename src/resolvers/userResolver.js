@@ -15,8 +15,9 @@ const userResolver = {
 
       return await User.findById(req.session.userId);
     },
-    getAllUsers: async () => {
-      return await User.find();
+    getAllUsers: async (_, { currentPageNumber, limitValue }) => {
+      const skipValue = (currentPageNumber - 1) * limitValue;
+      return await User.find().limit(limitValue).skip(skipValue);
     },
   },
 

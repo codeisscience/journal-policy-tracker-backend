@@ -2,6 +2,7 @@ import { User } from "../models/User";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { COOKIE_NAME } from "../constants";
+import generateMockUsersArray from "../utils/generateUserData";
 
 const saltRounds = 12;
 
@@ -14,8 +15,9 @@ const userResolver = {
 
       return await User.findById(req.session.userId);
     },
-    getAllUsers: async () => {
-      return await User.find();
+    getAllUsers: async (_, { currentPageNumber, limitValue }) => {
+      const skipValue = (currentPageNumber - 1) * limitValue;
+      return await User.find().limit(limitValue).skip(skipValue);
     },
   },
 
@@ -114,6 +116,18 @@ const userResolver = {
           resolve(true);
         })
       );
+    },
+
+    addMockUserData: async (_, { numberOfUsers }) => {
+      try {
+        const generatedUsers = generateMockUsersArray(numberOfUsers);
+        await User.insertMany(generatedUsers);
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+
+      return true;
     },
   },
 };

@@ -13,7 +13,7 @@ const journalSchema = new mongoose.Schema(
     },
 
     issn: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },
@@ -39,6 +39,37 @@ const journalSchema = new mongoose.Schema(
       },
 
       policyType: {
+        type: String,
+        enum: ["Number One", "Number Two", "Number Three", "Number Four"],
+        required: true,
+      },
+
+      isDataAvailabilityStatementPublished: {
+        type: Boolean,
+        required: true,
+      },
+
+      isDataShared: {
+        type: Boolean,
+        required: true,
+      },
+
+      isDataPeerReviewed: {
+        type: Boolean,
+        required: true,
+      },
+
+      enforced: {
+        type: String,
+        enum: [
+          "Yes - Before Publication",
+          "Sometimes - Post-Publication Audit",
+          "No - Not Enforced",
+        ],
+        required: true,
+      },
+
+      enforcedEvidence: {
         type: String,
         required: true,
       },

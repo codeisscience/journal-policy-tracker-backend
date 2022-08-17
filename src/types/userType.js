@@ -6,6 +6,8 @@ const userType = gql`
     fullName: String!
     username: String!
     email: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input RegisterInput {
@@ -32,13 +34,14 @@ const userType = gql`
 
   type Query {
     getCurrentUser: User
-    getAllUsers: [User]
+    getAllUsers(currentPageNumber: Int!, limitValue: Int!): [User]
   }
 
   type Mutation {
     register(userInfo: RegisterInput!): UserResponse!
     login(userInfo: LoginInput!): UserResponse!
     logout: Boolean!
+    addMockUserData(numberOfUsers: Int!): Boolean!
   }
 `;
 

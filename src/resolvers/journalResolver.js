@@ -1,10 +1,60 @@
 import { Journal } from "../models/Journal";
 import { User } from "../models/User";
+import generateMockJournalsArray from "../utils/generateJournalData";
 
 const journalResolver = {
+  PolicyType: {
+    NUMBER_ONE: "Number One",
+    NUMBER_TWO: "Number Two",
+    NUMBER_THREE: "Number Three",
+    NUMBER_FOUR: "Number Four",
+  },
+
+  Enforced: {
+    YES: "Yes - Before Publication",
+    SOMETIMES: "Sometimes - Post-Publication Audit",
+    NO: "No - Not Enforced",
+  },
+
   Query: {
-    getAllJournals: async () => {
-      return await Journal.find();
+    getAllJournals: async (_, { currentPageNumber, limitValue }) => {
+      const skipValue = (currentPageNumber - 1) * limitValue;
+      return await Journal.find().limit(limitValue).skip(skipValue);
+    },
+
+    getAllJournalsByCurrentUser: async (
+      _,
+      { currentPageNumber, limitValue },
+      { req }
+    ) => {
+      const skipValue = (currentPageNumber - 1) * limitValue;
+
+      const currentUser = await User.findById(req.session.userId);
+
+      const allJournalsByCurrentUser = await Journal.find({
+        _id: { $in: currentUser.journals },
+      })
+        .limit(limitValue)
+        .skip(skipValue);
+
+      return allJournalsByCurrentUser;
+    },
+
+    getAllJournalsByUserId: async (
+      _,
+      { userId, currentPageNumber, limitValue }
+    ) => {
+      const skipValue = (currentPageNumber - 1) * limitValue;
+
+      const user = await User.findById(userId);
+
+      const journals = await Journal.find({
+        _id: { $in: user.journals },
+      })
+        .limit(limitValue)
+        .skip(skipValue);
+
+      return journals;
     },
 
     getJournalByISSN: async (_, { issn }) => {
@@ -80,6 +130,26 @@ const journalResolver = {
 
       const updatedJournal = await Journal.findOne({ _id });
       return { journal: updatedJournal };
+    },
+
+    addMockJournalData: async (_, { numberOfJournals, userId }) => {
+      try {
+        const generatedJournals = generateMockJournalsArray(
+          numberOfJournals,
+          userId
+        );
+        await Journal.insertMany(generatedJournals);
+
+        const journalIds = generatedJournals.map((journal) => journal.id);
+        const user = await User.findById(userId);
+        user.journals.push(...journalIds);
+        await user.save();
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+
+      return true;
     },
   },
 };

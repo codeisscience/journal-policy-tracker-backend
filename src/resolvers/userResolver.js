@@ -7,6 +7,12 @@ import generateMockUsersArray from "../utils/generateUserData";
 const saltRounds = 12;
 
 const userResolver = {
+  Role: {
+    ADMIN: "ADMIN",
+    MODERATOR: "MODERATOR",
+    USER: "USER",
+  },
+
   Query: {
     getCurrentUser: async (_, _args, { req }) => {
       if (!req.session.userId) {

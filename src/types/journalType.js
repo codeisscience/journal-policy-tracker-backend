@@ -86,7 +86,7 @@ const journalType = gql`
     createJournal(journalToCreate: JournalInput!): JournalResponse!
     deleteJournal(issnToDelete: Int!): Boolean!
     updateJournal(
-      issnToUpdate: Int!
+      issnToUpdate: String!
       newJournalDetails: JournalInput!
     ): JournalResponse!
 

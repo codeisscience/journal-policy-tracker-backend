@@ -39,7 +39,7 @@ const journalType = gql`
   }
 
   type Journal {
-    id: ID
+    id: ID!
     title: String!
     url: String!
     issn: String!
@@ -47,7 +47,7 @@ const journalType = gql`
     policies: Policies!
     createdAt: String!
     updatedAt: String!
-    createdBy: String!
+    createdBy: ID!
   }
 
   input JournalInput {

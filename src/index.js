@@ -12,6 +12,7 @@ import { applyMiddleware } from "graphql-middleware";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { COOKIE_NAME } from "./constants";
+import { journalMiddleware } from "./middlewares/journalMiddleware";
 
 const startServer = async () => {
   const app = express();
@@ -59,7 +60,8 @@ const startServer = async () => {
   const server = new ApolloServer({
     schema: applyMiddleware(
       makeExecutableSchema({ typeDefs, resolvers }),
-      authMiddleware
+      authMiddleware,
+      journalMiddleware
     ),
     context: ({ req, res }) => ({ req, res, redis }),
   });

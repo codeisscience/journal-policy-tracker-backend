@@ -19,7 +19,9 @@ const journalResolver = {
   Query: {
     getAllJournals: async (_, { currentPageNumber, limitValue }) => {
       const skipValue = (currentPageNumber - 1) * limitValue;
-      return await Journal.find().limit(limitValue).skip(skipValue);
+      const totalJournals = await Journal.count();
+      const journals = await Journal.find().limit(limitValue).skip(skipValue);
+      return { journals, totalJournals };
     },
 
     getAllJournalsByCurrentUser: async (

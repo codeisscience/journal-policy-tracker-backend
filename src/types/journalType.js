@@ -79,7 +79,7 @@ const journalType = gql`
     getAllJournalsByCurrentUser(
       currentPageNumber: Int!
       limitValue: Int!
-    ): [Journal]
+    ): PaginatedJournals
     getAllJournalsByUserId(
       userId: ID!
       currentPageNumber: Int!

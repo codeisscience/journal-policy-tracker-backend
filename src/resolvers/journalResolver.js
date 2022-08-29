@@ -55,13 +55,18 @@ const journalResolver = {
 
       const user = await User.findById(userId);
 
-      const journals = await Journal.find({
+      const numberOfJournalsByUser = user.journals.length;
+
+      const allJournalsByUser = await Journal.find({
         _id: { $in: user.journals },
       })
         .limit(limitValue)
         .skip(skipValue);
 
-      return journals;
+      return {
+        journals: allJournalsByUser,
+        totalJournals: numberOfJournalsByUser,
+      };
     },
 
     getJournalByISSN: async (_, { issn }) => {

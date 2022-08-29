@@ -84,7 +84,7 @@ const journalType = gql`
       userId: ID!
       currentPageNumber: Int!
       limitValue: Int!
-    ): [Journal]
+    ): PaginatedJournals
   }
 
   type Mutation {

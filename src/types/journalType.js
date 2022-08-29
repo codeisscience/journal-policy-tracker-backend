@@ -59,8 +59,8 @@ const journalType = gql`
   }
 
   type PaginatedJournals {
-    journals: [Journal]
-    totalJournals: Int
+    journals: [Journal]!
+    totalJournals: Int!
   }
 
   type JournalResponse {
@@ -74,7 +74,10 @@ const journalType = gql`
   }
 
   type Query {
-    getAllJournals(currentPageNumber: Int!, limitValue: Int!): PaginatedJournals
+    getAllJournals(
+      currentPageNumber: Int!
+      limitValue: Int!
+    ): PaginatedJournals!
     getJournalByISSN(issn: String!): Journal
     getAllJournalsByCurrentUser(
       currentPageNumber: Int!

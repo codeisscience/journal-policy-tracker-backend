@@ -23,7 +23,12 @@ const userResolver = {
     },
     getAllUsers: async (_, { currentPageNumber, limitValue }) => {
       const skipValue = (currentPageNumber - 1) * limitValue;
-      return await User.find().limit(limitValue).skip(skipValue);
+      const totalUsers = User.count();
+      const users = await User.find().limit(limitValue).skip(skipValue);
+      return {
+        users,
+        totalUsers,
+      };
     },
   },
 

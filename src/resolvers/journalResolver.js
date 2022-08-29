@@ -112,9 +112,9 @@ const journalResolver = {
         };
       }
 
-      const { _id } = journalToUpdate;
+      const { id } = journalToUpdate;
       try {
-        await Journal.updateOne({ _id }, { ...newJournalDetails });
+        await Journal.findByIdAndUpdate(id, { ...newJournalDetails });
       } catch (error) {
         if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
           return {
@@ -128,7 +128,7 @@ const journalResolver = {
         }
       }
 
-      const updatedJournal = await Journal.findOne({ _id });
+      const updatedJournal = await Journal.findById(id);
       return { journal: updatedJournal };
     },
 

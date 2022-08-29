@@ -39,7 +39,7 @@ const journalType = gql`
   }
 
   type Journal {
-    id: ID
+    id: ID!
     title: String!
     url: String!
     issn: String!
@@ -47,7 +47,7 @@ const journalType = gql`
     policies: Policies!
     createdAt: String!
     updatedAt: String!
-    createdBy: String!
+    createdBy: ID!
   }
 
   input JournalInput {
@@ -70,7 +70,7 @@ const journalType = gql`
 
   type Query {
     getAllJournals(currentPageNumber: Int!, limitValue: Int!): [Journal]
-    getJournalByISSN(issn: Int): Journal
+    getJournalByISSN(issn: String!): Journal
     getAllJournalsByCurrentUser(
       currentPageNumber: Int!
       limitValue: Int!
@@ -84,9 +84,9 @@ const journalType = gql`
 
   type Mutation {
     createJournal(journalToCreate: JournalInput!): JournalResponse!
-    deleteJournal(issnToDelete: Int!): Boolean!
+    deleteJournal(issnToDelete: String!): Boolean!
     updateJournal(
-      issnToUpdate: Int!
+      issnToUpdate: String!
       newJournalDetails: JournalInput!
     ): JournalResponse!
 

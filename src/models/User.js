@@ -25,6 +25,13 @@ const userSchema = new Schema(
       required: true,
     },
 
+    role: {
+      type: String,
+      enum: ["USER", "ADMIN", "MODERATOR"],
+      required: true,
+      default: "USER",
+    },
+
     journals: [
       {
         type: Schema.Types.ObjectId,

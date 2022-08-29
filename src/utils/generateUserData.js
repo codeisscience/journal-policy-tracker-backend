@@ -6,6 +6,7 @@ const generateMockUser = () => {
     fullName: faker.fake("{{name.firstName}} {{name.lastName}}"),
     username: faker.internet.userName(),
     email: faker.internet.email(),
+    role: faker.helpers.arrayElement(["USER", "MODERATOR"]),
     password: faker.internet.password(),
     createdAt: faker.date.past(),
   };

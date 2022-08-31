@@ -58,6 +58,11 @@ const journalType = gql`
     policies: PoliciesInput!
   }
 
+  type PaginatedJournals {
+    journals: [Journal]!
+    totalJournals: Int!
+  }
+
   type JournalResponse {
     journal: Journal
     errors: [Error]
@@ -69,17 +74,20 @@ const journalType = gql`
   }
 
   type Query {
-    getAllJournals(currentPageNumber: Int!, limitValue: Int!): [Journal]
+    getAllJournals(
+      currentPageNumber: Int!
+      limitValue: Int!
+    ): PaginatedJournals!
     getJournalByISSN(issn: String!): Journal
     getAllJournalsByCurrentUser(
       currentPageNumber: Int!
       limitValue: Int!
-    ): [Journal]
+    ): PaginatedJournals
     getAllJournalsByUserId(
       userId: ID!
       currentPageNumber: Int!
       limitValue: Int!
-    ): [Journal]
+    ): PaginatedJournals
   }
 
   type Mutation {

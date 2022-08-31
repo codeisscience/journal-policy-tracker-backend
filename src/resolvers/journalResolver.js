@@ -19,7 +19,9 @@ const journalResolver = {
   Query: {
     getAllJournals: async (_, { currentPageNumber, limitValue }) => {
       const skipValue = (currentPageNumber - 1) * limitValue;
-      return await Journal.find().limit(limitValue).skip(skipValue);
+      const totalJournals = await Journal.count();
+      const journals = await Journal.find().limit(limitValue).skip(skipValue);
+      return { journals, totalJournals };
     },
 
     getAllJournalsByCurrentUser: async (
@@ -31,13 +33,18 @@ const journalResolver = {
 
       const currentUser = await User.findById(req.session.userId);
 
+      const numberOfJournalsByCurrentUser = currentUser.journals.length;
+
       const allJournalsByCurrentUser = await Journal.find({
         _id: { $in: currentUser.journals },
       })
         .limit(limitValue)
         .skip(skipValue);
 
-      return allJournalsByCurrentUser;
+      return {
+        journals: allJournalsByCurrentUser,
+        totalJournals: numberOfJournalsByCurrentUser,
+      };
     },
 
     getAllJournalsByUserId: async (
@@ -48,13 +55,18 @@ const journalResolver = {
 
       const user = await User.findById(userId);
 
-      const journals = await Journal.find({
+      const numberOfJournalsByUser = user.journals.length;
+
+      const allJournalsByUser = await Journal.find({
         _id: { $in: user.journals },
       })
         .limit(limitValue)
         .skip(skipValue);
 
-      return journals;
+      return {
+        journals: allJournalsByUser,
+        totalJournals: numberOfJournalsByUser,
+      };
     },
 
     getJournalByISSN: async (_, { issn }) => {

@@ -17,6 +17,11 @@ const userType = gql`
     updatedAt: String!
   }
 
+  type PaginatedUser {
+    users: [User]!
+    totalUsers: Int!
+  }
+
   input RegisterInput {
     fullName: String!
     username: String!
@@ -40,8 +45,8 @@ const userType = gql`
   }
 
   type Query {
-    getCurrentUser: User
-    getAllUsers(currentPageNumber: Int!, limitValue: Int!): [User]
+    getCurrentUser: User!
+    getAllUsers(currentPageNumber: Int!, limitValue: Int!): PaginatedUser!
   }
 
   type Mutation {

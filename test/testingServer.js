@@ -14,5 +14,10 @@ export const testingServer = new ApolloServer({
     journalMiddleware
   ),
 
-  context: ({ req, res }) => ({ req: { session: {} }, res }),
+  context: {
+    req: { session: {} },
+    res: {
+      clearCookie: () => {},
+    },
+  },
 });

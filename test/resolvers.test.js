@@ -1,9 +1,10 @@
 import { User } from "../src/models/User";
 import { createTestConnection } from "./createTestConnection";
-import REGISTER from "./graphql/REGISTER";
-import LOGIN from "./graphql/LOGIN";
+import REGISTER from "./graphql/mutations/REGISTER";
+import LOGIN from "./graphql/mutations/LOGIN";
+import GET_CURRENT_USER from "./graphql/queries/GET_CURRENT_USER";
 import { testingServer } from "./testingServer";
-import mongoose from "mongoose";
+const util = require("util");
 
 let conn;
 beforeAll(async () => {
@@ -17,20 +18,21 @@ afterAll(async () => {
 
 describe("resolvers", () => {
   jest.setTimeout(40000);
-  it("register, login and getCurrentUser", async () => {
-    const testUser = {
-      username: "deva",
-      email: "dev@dev.com",
-      password: "myPa$$w0rd",
-      fullName: "Devesh Kumar",
-    };
 
-    const expectedTestUser = {
-      username: "deva",
-      email: "dev@dev.com",
-      fullName: "Devesh Kumar",
-    };
+  const testUser = {
+    username: "dev",
+    email: "dev@dev.com",
+    password: "myPa$$w0rd",
+    fullName: "Devesh Kumar",
+  };
 
+  const expectedTestUser = {
+    username: "dev",
+    email: "dev@dev.com",
+    fullName: "Devesh Kumar",
+  };
+
+  it("register mutation", async () => {
     const registerResponse = await testingServer.executeOperation({
       query: REGISTER,
       variables: {
@@ -38,6 +40,12 @@ describe("resolvers", () => {
       },
     });
 
+    expect(registerResponse.data.register.user).toBeDefined();
+    expect(registerResponse.data.register.user).toEqual(expectedTestUser);
+    expect(registerResponse.data.register.errors).toBeNull();
+  });
+
+  it("login and getCurrentUser", async () => {
     const dbUser = await User.findOne({ email: testUser.email });
 
     expect(dbUser).toBeDefined();
@@ -52,8 +60,6 @@ describe("resolvers", () => {
       },
     });
 
-    console.log({ loginResponse: loginResponse.data.login });
-
     expect(loginResponse.data.login).toEqual({
       user: {
         id: dbUser.id,
@@ -64,15 +70,26 @@ describe("resolvers", () => {
       errors: null,
     });
 
-    // console.log({ dbUser });
+    const getCurrentUserResponse = await testingServer.executeOperation({
+      query: GET_CURRENT_USER,
+    });
 
-    // console.log({ registerResponse: registerResponse.data.register.user });
-    // console.log({
-    //   registerResponseError: registerResponse.data.register.errors,
-    // });
+    expect(getCurrentUserResponse.data.getCurrentUser).toEqual({
+      id: dbUser.id,
+      fullName: dbUser.fullName,
+      email: dbUser.email,
+      role: dbUser.role,
+      username: dbUser.username,
+      createdAt: Math.floor(new Date(dbUser.createdAt).getTime()).toString(),
+      updatedAt: Math.floor(new Date(dbUser.updatedAt).getTime()).toString(),
+    });
 
-    expect(registerResponse.data.register.user).toBeDefined();
-    expect(registerResponse.data.register.user).toEqual(expectedTestUser);
-    expect(registerResponse.data.register.errors).toBeNull();
+    // console.log(
+    //   util.inspect(getCurrentUserResponse, {
+    //     showHidden: false,
+    //     depth: 10,
+    //     colors: true,
+    //   })
+    // );
   });
 });

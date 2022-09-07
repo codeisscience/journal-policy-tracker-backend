@@ -210,4 +210,35 @@ describe("resolvers", () => {
         .createdBy
     ).toEqual(dbUser.id);
   });
+
+  it("Fetching all journal by current user (getAllJournalsByCurrentUser Query)", async () => {
+    const getAllJournalsByCurrentUserResponse =
+      await testingServer.executeOperation({
+        query: GET_ALL_JOURNALS_BY_CURRENT_USER,
+        variables: {
+          currentPageNumber: 1,
+          limitValue: 10,
+        },
+      });
+
+    expect(
+      getAllJournalsByCurrentUserResponse.data.getAllJournalsByCurrentUser
+        .journals[0].createdBy
+    ).toEqual(dbUser.id);
+
+    expect(
+      getAllJournalsByCurrentUserResponse.data.getAllJournalsByCurrentUser
+        .journals[1].createdBy
+    ).toEqual(dbUser.id);
+
+    expect(
+      getAllJournalsByCurrentUserResponse.data.getAllJournalsByCurrentUser
+        .journals[2].createdBy
+    ).toEqual(dbUser.id);
+
+    expect(
+      getAllJournalsByCurrentUserResponse.data.getAllJournalsByCurrentUser
+        .journals[3].createdBy
+    ).toEqual(dbUser.id);
+  });
 });

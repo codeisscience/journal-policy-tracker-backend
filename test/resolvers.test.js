@@ -124,4 +124,41 @@ describe("resolvers", () => {
       dbUser.id
     );
   });
+
+  it("Fetching all journals (getAllJournals Query)", async () => {
+    // Add 3 more journals
+    await testingServer.executeOperation({
+      query: CREATE_JOURNAL,
+      variables: testJournal2,
+    });
+
+    await testingServer.executeOperation({
+      query: CREATE_JOURNAL,
+      variables: testJournal3,
+    });
+
+    await testingServer.executeOperation({
+      query: CREATE_JOURNAL,
+      variables: testJournal4,
+    });
+
+    const getAllJournalsResponse = await testingServer.executeOperation({
+      query: GET_ALL_JOURNALS,
+      variables: {
+        currentPageNumber: 1,
+        limitValue: 10,
+      },
+    });
+
+    expect(getAllJournalsResponse.data).toBeDefined();
+    expect(getAllJournalsResponse.errors).toBeUndefined();
+
+    // Testing the response journals array
+    expect(getAllJournalsResponse.data.getAllJournals.journals).toEqual(
+      journalsArray
+    );
+
+    // Testing the response pagination info
+    expect(getAllJournalsResponse.data.getAllJournals.totalJournals).toBe(4);
+  });
 });

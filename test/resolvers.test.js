@@ -241,4 +241,29 @@ describe("resolvers", () => {
         .journals[3].createdBy
     ).toEqual(dbUser.id);
   });
+
+  it("Updating journals as a non-admin/mod (role-based auth)", async () => {
+    const updateJournalResponse = await testingServer.executeOperation({
+      query: UPDATE_JOURNAL,
+      variables: {
+        issnToUpdate: "11111111",
+        newJournalDetails: updatedJournal,
+      },
+    });
+
+    expect(updateJournalResponse.data).toBeNull();
+    expect(updateJournalResponse.errors).toBeDefined();
+  });
+
+  it("Deleting journals as a non-admin/mod (role-based auth)", async () => {
+    const deleteJournalResponse = await testingServer.executeOperation({
+      query: DELETE_JOURNAL,
+      variables: {
+        issnToDelete: "11111111",
+      },
+    });
+
+    expect(deleteJournalResponse.data).toBeNull();
+    expect(deleteJournalResponse.errors).toBeDefined();
+  });
 });

@@ -161,4 +161,18 @@ describe("resolvers", () => {
     // Testing the response pagination info
     expect(getAllJournalsResponse.data.getAllJournals.totalJournals).toBe(4);
   });
+
+  it("Fetching journal by ISSN (getJournalByISSN Query)", async () => {
+    const getJournalByISSNResponse = await testingServer.executeOperation({
+      query: GET_JOURNAL_BY_ISSN,
+      variables: {
+        issn: "11111111",
+      },
+    });
+    expect(getJournalByISSNResponse.data).toBeDefined();
+    expect(getJournalByISSNResponse.errors).toBeUndefined();
+    expect(getJournalByISSNResponse.data.getJournalByISSN).toEqual(
+      testJournal1.journal
+    );
+  });
 });

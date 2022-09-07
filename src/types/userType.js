@@ -46,6 +46,7 @@ const userType = gql`
 
   type Query {
     getCurrentUser: User
+    getUserById(userId: ID): User
     getAllUsers(currentPageNumber: Int!, limitValue: Int!): PaginatedUser!
   }
 

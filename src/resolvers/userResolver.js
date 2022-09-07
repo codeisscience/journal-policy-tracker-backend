@@ -21,6 +21,11 @@ const userResolver = {
 
       return await User.findById(req.session.userId);
     },
+
+    getUserById: async (_, { userId }) => {
+      return await User.findById(userId);
+    },
+
     getAllUsers: async (_, { currentPageNumber, limitValue }) => {
       const skipValue = (currentPageNumber - 1) * limitValue;
       const totalUsers = User.count();

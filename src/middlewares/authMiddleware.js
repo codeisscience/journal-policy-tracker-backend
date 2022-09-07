@@ -18,7 +18,6 @@ const isModerator = rule()(async (_, __, { req }) => {
 export const authMiddleware = shield({
   Query: {
     // user queries
-    getCurrentUser: isAuthenticated,
     getAllUsers: and(isAuthenticated, or(isAdmin, isModerator)),
 
     // journal queries

@@ -11,7 +11,7 @@ import cors from "cors";
 import { applyMiddleware } from "graphql-middleware";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { COOKIE_NAME } from "./constants";
+import { COOKIE_NAME, __prod__ } from "./constants";
 import { journalMiddleware } from "./middlewares/journalMiddleware";
 
 const startServer = async () => {
@@ -23,20 +23,30 @@ const startServer = async () => {
 
   app.set("trust proxy", 1);
 
-  // Temporary dynamic origin
-  var whitelist = ["https://studio.apollographql.com", "http://localhost:3000"];
-  var corsOptions = {
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  };
-
-  app.use(cors(corsOptions));
+  if (__prod__) {
+    app.use(
+      cors({
+        origin: process.env.CORS_ORIGIN,
+        credentials: true,
+      })
+    );
+  } else {
+    var whitelist = [
+      "https://studio.apollographql.com",
+      "http://localhost:3000",
+    ];
+    var corsOptions = {
+      origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true,
+    };
+    app.use(cors(corsOptions));
+  }
 
   app.use(
     session({
@@ -50,6 +60,7 @@ const startServer = async () => {
         httpOnly: true, // cannot fetch cookie from front-end at document.cookie
         sameSite: "none",
         secure: true, // cookie only words in https
+        domain: __prod__ ? ".frontendDomain1234123412341234.com" : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,

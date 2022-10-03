@@ -25,21 +25,40 @@
 
 ---
 
+### Prerequisites
+
+- [MongoDB](https://www.mongodb.com/try/download/community) 5.0 or newer.
+- [Redis](https://redis.io/download/) - It is available only for Linux and Mac so if you are using windows then try using [this](https://github.com/tporadowski/redis) version of Redis.
+
+Create an `.env` file in the root folder and paste the following into it.
+
+```
+DATABASE_URL=mongodb://localhost:27017/testMongo
+PORT=4000
+SESSION_SECRET=asdilkhudfgaiosuvbiapsdi
+```
+
 ### Installing dependencies
 
 ```console
-$ npm install
-or
 $ yarn install
 ```
 
 ### Running
 
-To run the express application:
+To run Apollo Server:
 
 ```console
 $ yarn start
 ```
+
+To run all the tests for the server:
+
+```console
+$ yarn test
+```
+
+> These commands and values in the `.env` file will change after the deployment of the app so check back if they are not working anymore. If you are facing any problems while setting up this project locally then feel free to create an issue.
 
 ## Contribute to this project
 

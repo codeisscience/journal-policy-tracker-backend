@@ -145,6 +145,62 @@ const userResolver = {
 
       return true;
     },
+
+    changeFullName: async (_, { userInfo }) => {
+      const { usernameOrEmail, password } = userInfo.loginInfo;
+      const { newFullname } = userInfo;
+
+      let user;
+      if (!validator.isEmail(usernameOrEmail)) {
+        user = await User.findOne({ username: usernameOrEmail });
+      } else {
+        user = await User.findOne({ email: usernameOrEmail });
+      }
+
+      if (!user) {
+        return {
+          errors: [
+            {
+              field: "usernameOrEmail",
+              message: "that username or email does not exist",
+            },
+          ],
+        };
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (isPasswordValid) {
+        if (user.fullName !== newFullname) {
+          await user.updateOne({
+            fullName: newFullname,
+            updatedAt: new Date(),
+          })
+
+          user = await User.findOne();
+        } else {
+          return {
+            errors: [
+              {
+                field: "newFullname",
+                message: "newFullname cannot be the same as the fullName",
+              },
+            ],
+          };
+        }
+      } else {
+        return {
+          errors: [
+            {
+              field: "password",
+              message: "incorrect password",
+            },
+          ],
+        };
+      }
+
+      return { user };
+    },
   },
 };
 

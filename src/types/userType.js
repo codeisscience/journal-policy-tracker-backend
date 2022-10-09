@@ -34,6 +34,11 @@ const userType = gql`
     password: String!
   }
 
+  input ChangeFullnameInput {
+    loginInfo: LoginInput!
+    newFullname: String!
+  }
+
   type UserResponse {
     user: User
     errors: [Error]
@@ -55,6 +60,7 @@ const userType = gql`
     login(userInfo: LoginInput!): UserResponse!
     logout: Boolean!
     addMockUserData(numberOfUsers: Int!): Boolean!
+    changeFullName(userInfo:ChangeFullnameInput!):UserResponse!
   }
 `;
 

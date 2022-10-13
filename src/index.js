@@ -60,7 +60,7 @@ const startServer = async () => {
         httpOnly: true, // cannot fetch cookie from front-end at document.cookie
         sameSite: "none",
         secure: true, // cookie only words in https
-        domain: __prod__ ? ".frontendDomain1234123412341234.com" : undefined,
+        domain: __prod__ ? ".codeisscience.com" : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,

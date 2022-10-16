@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
+    "start": "yarn build && node dist/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
+    "build": "babel src -s -d dist",
     "test": "jest --config jest.config.json ./test"
   },
   "repository": {

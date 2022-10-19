@@ -1,0 +1,38 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: DockerHub Login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        
+    - name: Create production env file
+      env:
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      run : |
+        touch .env.production
+        echo CORS_ORIGIN=https://codeisscience.com >> .env.production
+        echo SESSION_SECRET=$SESSION_SECRET >> .env.production
+        
+    - name: Build the Docker Image
+      run: docker build -t codeisscience/journal-policy-tracker-backend:$(echo "$(date "+%Y%m%d%H%M") - ($(date +%M)%5)" | bc) .
+
+    - name: Push the Docker Image to DockerHub
+      run: docker push codeisscience/journal-policy-tracker-backend:$(echo "$(date "+%Y%m%d%H%M") - ($(date +%M)%5)" | bc)
+
+

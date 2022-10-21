@@ -28,10 +28,10 @@ jobs:
         echo SESSION_SECRET=$SESSION_SECRET >> .env.production
 
     - name: Build the Docker Image
-      run: docker build -t codeisscience/journal-policy-tracker-backend:$(date +"%d/%b/%Y %a %H:%M") .
+      run: docker build -t codeisscience/journal-policy-tracker-backend:$(date +"%d/%b/%Y_%a_%H:%M") .
       
     - name: Push the Docker Image to DockerHub
-      run: docker push codeisscience/journal-policy-tracker-backend:$(date +"%d/%b/%Y %a %H:%M")
+      run: docker push codeisscience/journal-policy-tracker-backend:$(date +"%d/%b/%Y_%a_%H:%M")
       
       
       

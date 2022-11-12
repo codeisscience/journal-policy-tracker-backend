@@ -1,0 +1,29 @@
+name: Dokku CI
+
+on:
+  push:
+    branches: [ "dev" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Cloning Repository
+      uses: actions/checkout@v3
+    
+    - name: Create production env file
+      env:
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      run : |
+        touch .env.production
+        echo CORS_ORIGIN=https://codeisscience.com >> .env.production
+        echo SESSION_SECRET=$SESSION_SECRET >> .env.production
+
+    - name: Push to Dokku
+      uses: dokku/github-action@v1.3.0
+      with:
+        git_remote_url: ${{ secrets.DOKKU_GIT_REMOTE_URL }} 
+        ssh_private_key: ${{ secrets.RSA_PRIVATE_KEY }}

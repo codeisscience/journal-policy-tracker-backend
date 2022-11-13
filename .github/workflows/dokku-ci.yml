@@ -25,6 +25,9 @@ jobs:
         echo SESSION_SECRET=$SESSION_SECRET >> .env.production
     - name: Push to Dokku
       uses: dokku/github-action@v1.3.0
+      env:
+          GIT_SSH_COMMAND: 'ssh -vvv'
       with:
+        git_push_flags: '-vvv'
         git_remote_url: 'ssh://dokku@164.92.178.133:22/~/api'
         ssh_private_key: ${{ secrets.RSA_PRIVATE_KEY }}

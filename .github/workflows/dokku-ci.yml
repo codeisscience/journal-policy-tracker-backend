@@ -33,7 +33,7 @@ jobs:
       run: |
         git add --force .env.production
         git commit -m "add new prod env file"
-        git push origin master
+        git push origin dev
         
     - name: Push to Dokku
       uses: dokku/github-action@v1.3.0

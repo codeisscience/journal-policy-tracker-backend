@@ -46,11 +46,14 @@ Our Slack Community: [Slack Invite](https://join.slack.com/t/codeisscience/share
 
 Please refer to the project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
 
-1. **Fork** the repo on GitHub
-2. **Clone** the project to your own machine
-3. **Commit** changes to your own branch
-4. **Push** your work back up to your fork
-5. Submit a **Pull request** so that we can review your changes
+1. Fork this repository on GitHub.
+2. Clone the forked repository to your own machine.
+3. Create a new branch. You can name the branch something related to the feature you are adding or the bug that you are fixing.
+4. Commit changes to that branch.
+5. Follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to write the commit messages. Take a look at the past commit messages if needed.
+6. Push the commits you made to your fork.
+7. Submit a Pull request so that we can review your changes.
+8. After the Pull Request is merged, you can delete that branch form your local fork.
 
 ## Starware
 

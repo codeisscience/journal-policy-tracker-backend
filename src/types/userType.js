@@ -54,6 +54,7 @@ const userType = gql`
     register(userInfo: RegisterInput!): UserResponse!
     login(userInfo: LoginInput!): UserResponse!
     logout: Boolean!
+    changeUsername(newUsername: String!): UserResponse!
     addMockUserData(numberOfUsers: Int!): Boolean!
   }
 `;

@@ -134,6 +134,45 @@ const userResolver = {
       );
     },
 
+    changeUsername: async(_, { newUsername }, { req }) => {
+      const { username } = await User.findById(req.session.userId);
+
+      if(username === newUsername) {
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "old and new username are same",
+            },
+          ],
+        };
+      }
+
+      try {
+        await User.findByIdAndUpdate(
+          req.session.userId,
+          {
+            username: newUsername
+          }
+        );
+
+      } catch(error) {
+        if (error.code === 11000 && Object.keys(error.keyValue)[0] === "username") {
+          return {
+            errors: [
+              {
+                field: "username",
+                message: "username already exists",
+              },
+            ],
+          };
+        }
+      }
+
+      let updatedUser = await User.findById(req.session.userId);
+      return { user: updatedUser }
+    },
+
     addMockUserData: async (_, { numberOfUsers }) => {
       try {
         const generatedUsers = generateMockUsersArray(numberOfUsers);

@@ -1,8 +1,17 @@
-import { User } from "../models/User";
-import validator from "validator";
 import bcrypt from "bcrypt";
-import { COOKIE_NAME } from "../constants";
+import { v4 } from "uuid";
+import validator from "validator";
+import {
+  CENTER_IMAGE_URL,
+  CODE_IS_SCIENCE_URL,
+  COOKIE_NAME,
+  FORGET_PASSWORD_PREFIX,
+  LOGO_URL,
+} from "../constants";
+import { User } from "../models/User";
+import forgotPasswordEmailTemplate from "../utils/forgotPasswordEmailTemplate";
 import generateMockUsersArray from "../utils/generateUserData";
+import { sendEmail } from "../utils/sendEmail";
 
 const saltRounds = 12;
 
@@ -113,6 +122,94 @@ const userResolver = {
 
       req.session.userId = user.id;
       return { user };
+    },
+
+    forgotPassword: async (_, { email }, { redis }) => {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          return true;
+        }
+
+        const token = v4();
+        await redis.set(
+          FORGET_PASSWORD_PREFIX + token,
+          user.id,
+          "ex",
+          1000 * 60 * 60 * 24 * 3
+        );
+
+        const emailResult = await sendEmail(
+          email,
+          "Forgot Password",
+          forgotPasswordEmailTemplate(
+            `${process.env.CORS_ORIGIN}/change-password/${token}`,
+            LOGO_URL,
+            CENTER_IMAGE_URL,
+            CODE_IS_SCIENCE_URL
+          )
+        );
+
+        console.log({ emailResult });
+
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    changeForgotPassword: async (_, { token, newPassword }, { redis, req }) => {
+      try {
+        if (newPassword.length <= 3) {
+          return {
+            errors: [
+              {
+                field: "newPassword",
+                message: "length must be greater than 3",
+              },
+            ],
+          };
+        }
+
+        const key = FORGET_PASSWORD_PREFIX + token;
+        const userId = await redis.get(key);
+        if (!userId) {
+          return {
+            errors: [
+              {
+                field: "token",
+                message: "token expired",
+              },
+            ],
+          };
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+          return {
+            errors: [
+              {
+                field: "token",
+                message: "user no longer exists",
+              },
+            ],
+          };
+        }
+
+        await User.findByIdAndUpdate(userId, {
+          password: await bcrypt.hash(newPassword, saltRounds),
+        });
+
+        await redis.del(key);
+
+        // This logs the user in after changing the password
+        req.session.userId = user.id;
+
+        return { user };
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     logout: (_, __, { req, res }) => {

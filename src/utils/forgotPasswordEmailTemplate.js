@@ -1,7 +1,7 @@
 const forgotPasswordEmailTemplate = (
   forgotPasswordURL,
   logoURL,
-  displayImageURL,
+  centerImageURL,
   codeIsScienceURL
 ) => {
   return `
@@ -424,7 +424,7 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
  exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color:
  #f84b4b; font-weight: normal; text-decoration: none" target="_blank" title="">
 																		<img align="center" alt="Forgot your password?" class="mcnImage"
-																			src="${displayImageURL}"
+																			src="${centerImageURL}"
 																			style="-ms-interpolation-mode: bicubic; border: 0; height: auto; outline: none;
  text-decoration: none; vertical-align: bottom; max-width:1200px; padding-bottom:
  0; display: inline !important; vertical-align: bottom;" width="600"></img>

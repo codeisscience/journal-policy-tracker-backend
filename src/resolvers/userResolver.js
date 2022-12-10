@@ -60,7 +60,6 @@ const userResolver = {
           username,
           email,
           password: hashedPassword,
-          createdAt: new Date(),
         });
 
         const insertedUser = await user.save();

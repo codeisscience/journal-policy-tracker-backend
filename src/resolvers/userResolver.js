@@ -60,6 +60,7 @@ const userResolver = {
           username,
           email,
           password: hashedPassword,
+          isEmailVerified: false,
         });
 
         const insertedUser = await user.save();
@@ -78,6 +79,9 @@ const userResolver = {
           return {
             errors: [{ field: "email", message: "email already taken" }],
           };
+        } else {
+          console.log({ registerError: error });
+          return error;
         }
       }
 

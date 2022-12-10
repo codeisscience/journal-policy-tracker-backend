@@ -13,6 +13,7 @@ const userType = gql`
     username: String!
     email: String!
     role: Role!
+    isEmailVerified: Boolean!
     createdAt: String!
     updatedAt: String!
   }

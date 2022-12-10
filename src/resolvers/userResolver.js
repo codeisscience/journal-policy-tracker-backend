@@ -9,7 +9,7 @@ import {
   LOGO_URL,
 } from "../constants";
 import { User } from "../models/User";
-import forgotPasswordEmailTemplate from "../utils/forgotPasswordEmailTemplate";
+import emailTemplate from "../utils/emailTemplate";
 import generateMockUsersArray from "../utils/generateUserData";
 import { sendEmail } from "../utils/sendEmail";
 
@@ -142,11 +142,18 @@ const userResolver = {
         const emailResult = await sendEmail(
           email,
           "Forgot Password",
-          forgotPasswordEmailTemplate(
+          emailTemplate(
             `${process.env.CORS_ORIGIN}/change-password/${token}`,
+            FORGOT_PASSWORD_EMAIL_TITLE,
             LOGO_URL,
-            CENTER_IMAGE_URL,
-            CODE_IS_SCIENCE_URL
+            CODE_IS_SCIENCE_URL,
+            FORGOT_PASSWORD_IMAGE_URL,
+            FORGOT_PASSWORD_IMAGE_URL_ALT,
+            FORGOT_PASSWORD_TITLE_ONE,
+            FORGOT_PASSWORD_TITLE_TWO,
+            FORGOT_PASSWORD_SUBTITLE,
+            FORGOT_PASSWORD_BUTTON_TEXT,
+            FORGOT_PASSWORD_BUTTON_POINTER_TEXT
           )
         );
 

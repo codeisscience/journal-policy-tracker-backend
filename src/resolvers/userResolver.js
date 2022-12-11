@@ -2,16 +2,17 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 import validator from "validator";
 import {
-  CENTER_IMAGE_URL,
-  CODE_IS_SCIENCE_URL,
+  ACCOUNT_VERIFICATION_PREFIX,
   COOKIE_NAME,
   FORGET_PASSWORD_PREFIX,
-  LOGO_URL,
 } from "../constants";
 import { User } from "../models/User";
-import emailTemplate from "../utils/emailTemplate";
 import generateMockUsersArray from "../utils/generateUserData";
 import { sendEmail } from "../utils/sendEmail";
+import {
+  accountVerificationEmail,
+  forgotPasswordEmail,
+} from "../utils/emailForms";
 
 const saltRounds = 12;
 
@@ -127,6 +128,77 @@ const userResolver = {
       return { user };
     },
 
+    sendAccountVerificationEmail: async (_, __, { redis, req }) => {
+      try {
+        const currentUser = await User.findById(req.session.userId);
+
+        const token = v4();
+        await redis.set(
+          ACCOUNT_VERIFICATION_PREFIX + token,
+          currentUser.id,
+          "ex",
+          1000 * 60 * 60 * 24 * 1 // 1 day
+        );
+
+        const accountVerificationEmailResults = await sendEmail(
+          currentUser.email,
+          "Account Verification",
+          accountVerificationEmail(
+            `${process.env.CORS_ORIGIN}/account-verification/${token}`
+          )
+        );
+
+        console.log({ accountVerificationEmailResults });
+
+        return true;
+      } catch (error) {
+        console.log({ sendVerificationEmailError: error });
+        return error;
+      }
+    },
+
+    verifyUserAccount: async (_, { token }, { redis }) => {
+      try {
+        const key = ACCOUNT_VERIFICATION_PREFIX + token;
+        const userId = await redis.get(key);
+
+        if (!userId) {
+          return {
+            errors: [
+              {
+                field: "token",
+                message: "token expired",
+              },
+            ],
+          };
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+          return {
+            errors: [
+              {
+                field: "token",
+                message: "user no longer exists",
+              },
+            ],
+          };
+        }
+
+        await User.findByIdAndUpdate(userId, {
+          isEmailVerified: true,
+        });
+
+        await redis.del(key);
+
+        return { user };
+      } catch (error) {
+        console.log({ verifyUserAccountError: error });
+        return error;
+      }
+    },
+
     forgotPassword: async (_, { email }, { redis }) => {
       try {
         const user = await User.findOne({ email });
@@ -139,24 +211,14 @@ const userResolver = {
           FORGET_PASSWORD_PREFIX + token,
           user.id,
           "ex",
-          1000 * 60 * 60 * 24 * 3
+          1000 * 60 * 60 * 24 * 3 // 3 days
         );
 
         const emailResult = await sendEmail(
           email,
           "Forgot Password",
-          emailTemplate(
-            `${process.env.CORS_ORIGIN}/change-password/${token}`,
-            FORGOT_PASSWORD_EMAIL_TITLE,
-            LOGO_URL,
-            CODE_IS_SCIENCE_URL,
-            FORGOT_PASSWORD_IMAGE_URL,
-            FORGOT_PASSWORD_IMAGE_URL_ALT,
-            FORGOT_PASSWORD_TITLE_ONE,
-            FORGOT_PASSWORD_TITLE_TWO,
-            FORGOT_PASSWORD_SUBTITLE,
-            FORGOT_PASSWORD_BUTTON_TEXT,
-            FORGOT_PASSWORD_BUTTON_POINTER_TEXT
+          forgotPasswordEmail(
+            `${process.env.CORS_ORIGIN}/change-password/${token}`
           )
         );
 

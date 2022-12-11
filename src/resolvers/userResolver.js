@@ -303,6 +303,86 @@ const userResolver = {
       );
     },
 
+    changePassword: async(_, { oldPassword, newPassword }, { req }) => {
+      const { password } = await User.findById(req.session.userId);
+      const isOldPasswordCorrect = await bcrypt.compare(oldPassword, password);
+
+      if(!isOldPasswordCorrect) {
+        return {
+          errors: [
+            {
+              field: "password",
+              message: "old password does not match",
+            },
+          ],
+        };
+      }
+
+      if (newPassword.length <= 3) {
+        return {
+          errors: [
+            {
+              field: "newPassword",
+              message: "length must be greater than 3",
+            },
+          ],
+        };
+      }
+
+      try {
+        await User.findByIdAndUpdate(
+          req.session.userId,
+          {
+            password: await bcrypt.hash(newPassword, saltRounds)
+          }
+        );
+      } catch(error) {
+        console.log(error);
+      }
+
+      let updatedUser = await User.findById(req.session.userId);
+      return { user: updatedUser }
+    },
+
+    changeUsername: async(_, { newUsername }, { req }) => {
+      const { username } = await User.findById(req.session.userId);
+
+      if(username === newUsername) {
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "old and new username are same",
+            },
+          ],
+        };
+      }
+
+      try {
+        await User.findByIdAndUpdate(
+          req.session.userId,
+          {
+            username: newUsername
+          }
+        );
+
+      } catch(error) {
+        if (error.code === 11000 && Object.keys(error.keyValue)[0] === "username") {
+          return {
+            errors: [
+              {
+                field: "username",
+                message: "username already exists",
+              },
+            ],
+          };
+        }
+      }
+
+      let updatedUser = await User.findById(req.session.userId);
+      return { user: updatedUser }
+    },
+
     addMockUserData: async (_, { numberOfUsers }) => {
       try {
         const generatedUsers = generateMockUsersArray(numberOfUsers);

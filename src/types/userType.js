@@ -55,6 +55,7 @@ const userType = gql`
     login(userInfo: LoginInput!): UserResponse!
     forgotPassword(email: String!): Boolean!
     changeForgotPassword(token: String!, newPassword: String!): UserResponse!
+    changePassword(oldPassword: String!, newPassword: String!): UserResponse!
     logout: Boolean!
     changeUsername(newUsername: String!): UserResponse!
     addMockUserData(numberOfUsers: Int!): Boolean!

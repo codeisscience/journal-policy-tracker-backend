@@ -1,11 +1,34 @@
-const forgotPasswordEmailTemplate = (
-  forgotPasswordURL,
+/**
+ *
+ * @param {string} buttonURL URL for the button in the e-mail
+ * @param {string} emailTitle Title of the e-mail
+ * @param {string} logoURL URL of the logo
+ * @param {string} codeIsScienceURL URL of the CodeIsScience logo
+ * @param {string} mainImageURL URL for the main image at the center of the e-mail
+ * @param {string} mainImageAlt Alt text for the center image
+ * @param {string} titleOne H1 heading of the e-mail
+ * @param {string} titleTwo H2 heading of the e-mail
+ * @param {string} subtitleText Message text below the headings of the e-mail
+ * @param {string} buttonText Text on the button of the e-mail
+ * @param {string} buttonTextPointerTitle Hover text on the bottom of the e-mail
+ * @returns
+ */
+
+export const emailTemplateWithLink = (
+  buttonURL,
+  emailTitle,
   logoURL,
-  centerImageURL,
-  codeIsScienceURL
+  codeIsScienceURL,
+  mainImageURL,
+  mainImageAlt,
+  titleOne,
+  titleTwo,
+  subtitleText,
+  buttonText,
+  buttonTextPointerTitle
 ) => {
-  return `
-		<!doctype html>
+  return /*html*/ `
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
 	xmlns:o="urn:schemas-microsoft-com:office:office">
 
@@ -14,7 +37,7 @@ const forgotPasswordEmailTemplate = (
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Reset Your Password</title>
+	<title>${emailTitle}</title>
 
 	<link href='https://fonts.googleapis.com/css?family=Asap:400,400italic,700,700italic' rel='stylesheet'
 		type='text/css'>
@@ -423,8 +446,7 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
 																	<a class="" href="${codeIsScienceURL}" style="mso-line-height-rule:
  exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color:
  #f84b4b; font-weight: normal; text-decoration: none" target="_blank" title="">
-																		<img align="center" alt="Forgot your password?" class="mcnImage"
-																			src="${centerImageURL}"
+																		<img align="center" alt="${mainImageAlt}" class="mcnImage" src="${mainImageURL}"
 																			style="-ms-interpolation-mode: bicubic; border: 0; height: auto; outline: none;
  text-decoration: none; vertical-align: bottom; max-width:1200px; padding-bottom:
  0; display: inline !important; vertical-align: bottom;" width="600"></img>
@@ -465,13 +487,13 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
 																<h1 class="null" style='color: #2a2a2a; font-family: "Asap", Helvetica,
  sans-serif; font-size: 32px; font-style: normal; font-weight: bold; line-height:
  125%; letter-spacing: 2px; text-align: center; display: block; margin: 0;
- padding: 0'><span style="text-transform:uppercase">Forgot</span></h1>
+ padding: 0'><span style="text-transform:uppercase">${titleOne}</span></h1>
 
 
 																<h2 class="null" style='color: #2a2a2a; font-family: "Asap", Helvetica,
  sans-serif; font-size: 24px; font-style: normal; font-weight: bold; line-height:
  125%; letter-spacing: 1px; text-align: center; display: block; margin: 0;
- padding: 0'><span style="text-transform:uppercase">your password?</span></h2>
+ padding: 0'><span style="text-transform:uppercase">${titleTwo}</span></h2>
 
 															</td>
 														</tr>
@@ -498,7 +520,7 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
  -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; word-break: break-word;
  color: #2a2a2a; font-family: "Asap", Helvetica, sans-serif; font-size: 16px;
  line-height: 150%; text-align: center; padding-top:9px; padding-right: 18px;
- padding-bottom: 9px; padding-left: 18px;' valign="top">Not to worry, we got you! Let’s get you a new password.
+ padding-bottom: 9px; padding-left: 18px;' valign="top">${subtitleText}
 																<br></br>
 															</td>
 														</tr>
@@ -534,11 +556,11 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
  exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
  font-family: 'Asap', Helvetica, sans-serif; font-size: 16px; padding-top:24px;
  padding-right:48px; padding-bottom:24px; padding-left:48px;" valign="middle">
-																				<a class="mcnButton " href="${forgotPasswordURL}" style="mso-line-height-rule: exactly;
+																				<a class="mcnButton " href="${buttonURL}" style="mso-line-height-rule: exactly;
  -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; display: block; color: #f84b4b;
  font-weight: normal; text-decoration: none; font-weight: normal;letter-spacing:
  1px;line-height: 100%;text-align: center;text-decoration: none;color:
- #FFFFFF; text-transform:uppercase;" target="_blank" title="Reset your CodeIsScience password">Reset password</a>
+ #FFFFFF; text-transform:uppercase;" target="_blank" title="${buttonTextPointerTitle}">${buttonText}</a>
 																			</td>
 																		</tr>
 																	</tbody>
@@ -643,4 +665,3 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
 	`;
 };
 
-export default forgotPasswordEmailTemplate;

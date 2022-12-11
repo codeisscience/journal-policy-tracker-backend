@@ -13,6 +13,7 @@ const userType = gql`
     username: String!
     email: String!
     role: Role!
+    isEmailVerified: Boolean!
     createdAt: String!
     updatedAt: String!
   }
@@ -55,6 +56,8 @@ const userType = gql`
     login(userInfo: LoginInput!): UserResponse!
     forgotPassword(email: String!): Boolean!
     changeForgotPassword(token: String!, newPassword: String!): UserResponse!
+    sendAccountVerificationEmail: Boolean!
+    verifyUserAccount(token: String!): UserResponse!
     changePassword(oldPassword: String!, newPassword: String!): UserResponse!
     logout: Boolean!
     changeUsername(newUsername: String!): UserResponse!

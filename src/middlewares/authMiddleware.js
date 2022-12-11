@@ -1,8 +1,9 @@
 import { rule, shield, and, or } from "graphql-shield";
 import { User } from "../models/User";
 
-const isAuthenticated = rule()((_, __, { req }) => {
-  return !!req.session.userId;
+const isAuthenticated = rule()(async (_, __, { req }) => {
+  const user = await User.findById(req.session.userId);
+  return user && user.isEmailVerified;
 });
 
 const isAdmin = rule()(async (_, __, { req }) => {

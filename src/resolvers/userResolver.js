@@ -303,11 +303,11 @@ const userResolver = {
       );
     },
 
-    changePassword: async(_, { oldPassword, newPassword }, { req }) => {
+    changePassword: async (_, { oldPassword, newPassword }, { req }) => {
       const { password } = await User.findById(req.session.userId);
       const isOldPasswordCorrect = await bcrypt.compare(oldPassword, password);
 
-      if(!isOldPasswordCorrect) {
+      if (!isOldPasswordCorrect) {
         return {
           errors: [
             {
@@ -330,24 +330,21 @@ const userResolver = {
       }
 
       try {
-        await User.findByIdAndUpdate(
-          req.session.userId,
-          {
-            password: await bcrypt.hash(newPassword, saltRounds)
-          }
-        );
-      } catch(error) {
+        await User.findByIdAndUpdate(req.session.userId, {
+          password: await bcrypt.hash(newPassword, saltRounds),
+        });
+      } catch (error) {
         console.log(error);
       }
 
       let updatedUser = await User.findById(req.session.userId);
-      return { user: updatedUser }
+      return { user: updatedUser };
     },
 
-    changeUsername: async(_, { newUsername }, { req }) => {
+    changeUsername: async (_, { newUsername }, { req }) => {
       const { username } = await User.findById(req.session.userId);
 
-      if(username === newUsername) {
+      if (username === newUsername) {
         return {
           errors: [
             {
@@ -359,15 +356,14 @@ const userResolver = {
       }
 
       try {
-        await User.findByIdAndUpdate(
-          req.session.userId,
-          {
-            username: newUsername
-          }
-        );
-
-      } catch(error) {
-        if (error.code === 11000 && Object.keys(error.keyValue)[0] === "username") {
+        await User.findByIdAndUpdate(req.session.userId, {
+          username: newUsername,
+        });
+      } catch (error) {
+        if (
+          error.code === 11000 &&
+          Object.keys(error.keyValue)[0] === "username"
+        ) {
           return {
             errors: [
               {
@@ -380,7 +376,7 @@ const userResolver = {
       }
 
       let updatedUser = await User.findById(req.session.userId);
-      return { user: updatedUser }
+      return { user: updatedUser };
     },
 
     addMockUserData: async (_, { numberOfUsers }) => {

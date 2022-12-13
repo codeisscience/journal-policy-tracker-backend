@@ -341,6 +341,32 @@ const userResolver = {
       return { user: updatedUser };
     },
 
+    changeFullName: async (_, { newFullName }, { req }) => {
+      const { fullName } = await User.findById(req.session.userId);
+
+      if (newFullName === fullName) {
+        return {
+          errors: [
+            {
+              field: "fullName",
+              message: "old and new full name are same",
+            },
+          ],
+        };
+      }
+
+      try {
+        await User.findByIdAndUpdate(req.session.userId, {
+          fullName: newFullName,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      let updatedUser = await User.findById(req.session.userId);
+      return { user: updatedUser };
+    },
+
     changeUsername: async (_, { newUsername }, { req }) => {
       const { username } = await User.findById(req.session.userId);
 

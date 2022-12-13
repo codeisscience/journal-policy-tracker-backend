@@ -61,6 +61,7 @@ const userType = gql`
     changePassword(oldPassword: String!, newPassword: String!): UserResponse!
     logout: Boolean!
     changeUsername(newUsername: String!): UserResponse!
+    changeFullName(newFullName: String!): UserResponse!
     addMockUserData(numberOfUsers: Int!): Boolean!
   }
 `;

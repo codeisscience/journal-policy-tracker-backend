@@ -6,6 +6,7 @@ import {
   VERIFY_NEW_EMAIL_ADDRESS_PREFIX,
   COOKIE_NAME,
   FORGET_PASSWORD_PREFIX,
+  NEW_EMAIL_ADDRESS_PREFIX,
 } from "../constants";
 import { User } from "../models/User";
 import generateMockUsersArray from "../utils/generateUserData";
@@ -196,6 +197,13 @@ const userResolver = {
         await redis.set(
           VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token,
           currentUser.id,
+          "ex",
+          1000 * 60 * 60 * 24 * 1 // 1 day
+        );
+
+        await redis.set(
+          NEW_EMAIL_ADDRESS_PREFIX + token,
+          newEmailAddress,
           "ex",
           1000 * 60 * 60 * 24 * 1 // 1 day
         );

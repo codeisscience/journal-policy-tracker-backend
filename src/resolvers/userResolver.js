@@ -226,6 +226,41 @@ const userResolver = {
       }
     },
 
+    changeEmailAddress: async (_, { token }, { redis }) => {
+      try {
+        const userId = await redis.get(VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token);
+
+        if (!userId) {
+          return {
+            errors: [
+              {
+                field: "token",
+                message: "token expired",
+              },
+            ],
+          };
+        }
+
+        const newEmailAddress = await redis.get(
+          NEW_EMAIL_ADDRESS_PREFIX + token
+        );
+
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { email: newEmailAddress },
+          { new: true }
+        );
+
+        await redis.del(VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token);
+        await redis.del(NEW_EMAIL_ADDRESS_PREFIX + token);
+
+        return { user };
+      } catch (error) {
+        console.log({ changeEmailAddressError: error });
+        return error;
+      }
+    },
+
     sendAccountVerificationEmail: async (_, __, { redis, req }) => {
       try {
         const currentUser = await User.findById(req.session.userId);

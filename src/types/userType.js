@@ -63,6 +63,7 @@ const userType = gql`
       newEmailAddress: String!
       password: String!
     ): UserResponse!
+    changeEmailAddress(token: String!): UserResponse!
     logout: Boolean!
     changeUsername(newUsername: String!): UserResponse!
     changeFullName(newFullName: String!): UserResponse!

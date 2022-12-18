@@ -59,6 +59,10 @@ const userType = gql`
     sendAccountVerificationEmail: Boolean!
     verifyUserAccount(token: String!): UserResponse!
     changePassword(oldPassword: String!, newPassword: String!): UserResponse!
+    sendNewEmailAddressVerificationEmail(
+      newEmailAddress: String!
+      password: String!
+    ): UserResponse!
     logout: Boolean!
     changeUsername(newUsername: String!): UserResponse!
     changeFullName(newFullName: String!): UserResponse!

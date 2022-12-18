@@ -33,6 +33,7 @@ export const authMiddleware = shield({
     changeUsername: isAuthenticated,
     changePassword: isAuthenticated,
     changeFullName: isAuthenticated,
+    sendNewEmailAddressVerificationEmail: isAuthenticated,
 
     // journal mutations
     addMockJournalData: and(isAuthenticated, isAdmin),

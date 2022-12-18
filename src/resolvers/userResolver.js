@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 import validator from "validator";
 import {
   ACCOUNT_VERIFICATION_PREFIX,
+  VERIFY_NEW_EMAIL_ADDRESS_PREFIX,
   COOKIE_NAME,
   FORGET_PASSWORD_PREFIX,
 } from "../constants";
@@ -12,6 +13,7 @@ import { sendEmail } from "../utils/sendEmail";
 import {
   accountVerificationEmail,
   forgotPasswordEmail,
+  verifyNewEmailAddressEmail,
 } from "../utils/emailForms";
 
 const saltRounds = 12;
@@ -128,6 +130,94 @@ const userResolver = {
       return { user };
     },
 
+    sendNewEmailAddressVerificationEmail: async (
+      _,
+      { newEmailAddress, password },
+      { redis, req }
+    ) => {
+      try {
+        const currentUser = await User.findById(req.session.userId);
+
+        // check if email address is valid
+        if (!validator.isEmail(newEmailAddress)) {
+          return {
+            errors: [
+              {
+                field: "newEmailAddress",
+                message: "invalid email address",
+              },
+            ],
+          };
+        }
+
+        // check if the new email address is the same as the old one
+        if (newEmailAddress === currentUser.email) {
+          return {
+            errors: [
+              {
+                field: "newEmailAddress",
+                message: "new email address cannot be the same as the old one",
+              },
+            ],
+          };
+        }
+
+        // check if the new email address is already taken
+        const isEmailTaken = await User.findOne({ email: newEmailAddress });
+        if (isEmailTaken) {
+          return {
+            errors: [
+              {
+                field: "newEmailAddress",
+                message: "email address already taken",
+              },
+            ],
+          };
+        }
+
+        // verify password
+        const isOldPasswordCorrect = await bcrypt.compare(
+          password,
+          currentUser.password
+        );
+
+        if (!isOldPasswordCorrect) {
+          return {
+            errors: [
+              {
+                field: "password",
+                message: "old password does not match",
+              },
+            ],
+          };
+        }
+
+        const token = v4();
+        await redis.set(
+          VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token,
+          currentUser.id,
+          "ex",
+          1000 * 60 * 60 * 24 * 1 // 1 day
+        );
+
+        // send verification email to new email address
+        const emailResult = await sendEmail(
+          newEmailAddress,
+          "Forgot Password",
+          verifyNewEmailAddressEmail(
+            `${process.env.CORS_ORIGIN}/new-email-verification/${token}`
+          )
+        );
+
+        console.log({ emailResult });
+
+        return { user: currentUser };
+      } catch (error) {
+        console.log({ changeEmailAddressError: error });
+        return error;
+      }
+    },
+
     sendAccountVerificationEmail: async (_, __, { redis, req }) => {
       try {
         const currentUser = await User.findById(req.session.userId);
@@ -216,7 +306,7 @@ const userResolver = {
 
         const emailResult = await sendEmail(
           email,
-          "Forgot Password",
+          "Confirm New Email Address",
           forgotPasswordEmail(
             `${process.env.CORS_ORIGIN}/change-password/${token}`
           )

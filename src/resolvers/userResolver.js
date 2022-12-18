@@ -211,7 +211,7 @@ const userResolver = {
         // send verification email to new email address
         const emailResult = await sendEmail(
           newEmailAddress,
-          "Forgot Password",
+          "Confirm New Email Address",
           verifyNewEmailAddressEmail(
             `${process.env.CORS_ORIGIN}/new-email-verification/${token}`
           )
@@ -314,7 +314,7 @@ const userResolver = {
 
         const emailResult = await sendEmail(
           email,
-          "Confirm New Email Address",
+          "Forgot Password",
           forgotPasswordEmail(
             `${process.env.CORS_ORIGIN}/change-password/${token}`
           )

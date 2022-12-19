@@ -13,9 +13,28 @@ import { authMiddleware } from "./middlewares/authMiddleware";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { journalMiddleware } from "./middlewares/journalMiddleware";
+import {
+  accountVerificationEmail,
+  forgotPasswordEmail,
+  verifyNewEmailAddressEmail,
+} from "./utils/emailForms";
 
 const startServer = async () => {
   const app = express();
+
+  if (!__prod__) {
+    app.get("/account-verification-template", function (req, res) {
+      res.send(accountVerificationEmail(process.env.CORS_ORIGIN));
+    });
+
+    app.get("/forgot-password-template", function (req, res) {
+      res.send(forgotPasswordEmail(process.env.CORS_ORIGIN));
+    });
+
+    app.get("/verify-new-email-address-template", function (req, res) {
+      res.send(verifyNewEmailAddressEmail(process.env.CORS_ORIGIN));
+    });
+  }
 
   const RedisStore = connectRedis(session);
 

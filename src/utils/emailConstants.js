@@ -59,8 +59,8 @@ export const USERNAME_UPDATE_ALERT_IMAGE_URL =
 export const USERNAME_UPDATE_ALERT_IMAGE_URL_ALT = "Username Update Alert";
 export const USERNAME_UPDATE_ALERT_TITLE_ONE = "YOUR USERNAME";
 export const USERNAME_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
-export const USERNAME_UPDATE_ALERT_SUBTITLE =
-  "If you did not update your username, please contact us immediately.";
+export const USERNAME_UPDATE_ALERT_SUBTITLE = (newUsername, timeOfChange) =>
+  `Your Code Is Science username was updated to ${newUsername} at ${timeOfChange}. If you did not update your username, please contact us immediately.`;
 
 // ? Password update alert email constants
 
@@ -70,8 +70,8 @@ export const PASSWORD_UPDATE_ALERT_IMAGE_URL =
 export const PASSWORD_UPDATE_ALERT_IMAGE_URL_ALT = "Password Update Alert";
 export const PASSWORD_UPDATE_ALERT_TITLE_ONE = "YOUR PASSWORD";
 export const PASSWORD_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
-export const PASSWORD_UPDATE_ALERT_SUBTITLE =
-  "If you did not update your password, please contact us immediately.";
+export const PASSWORD_UPDATE_ALERT_SUBTITLE = (timeOfChange) =>
+  `Your Code Is Science password was updated at ${timeOfChange}. If you did not update your password, please contact us immediately.`;
 
 // ? Email address update alert email constants
 
@@ -83,5 +83,8 @@ export const EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL_ALT =
   "Email Address Update Alert";
 export const EMAIL_ADDRESS_UPDATE_ALERT_TITLE_ONE = "YOUR EMAIL ADDRESS";
 export const EMAIL_ADDRESS_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
-export const EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE =
-  "If you did not update your email address, please contact us immediately.";
+export const EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE = (
+  newEmailAddress,
+  timeOfChange
+) =>
+  `Your Code Is Science email address was updated to ${newEmailAddress} at ${timeOfChange}. If you did not update your email address, please contact us immediately.`;

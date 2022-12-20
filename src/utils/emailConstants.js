@@ -50,3 +50,38 @@ export const NEW_EMAIL_ADDRESS_VERIFICATION_SUBTITLE =
 export const NEW_EMAIL_ADDRESS_VERIFICATION_BUTTON_TEXT = "VERIFY EMAIL";
 export const NEW_EMAIL_ADDRESS_VERIFICATION_BUTTON_POINTER_TEXT =
   "Verify your new email address";
+
+// ? Username update alert email constants
+
+export const USERNAME_UPDATE_ALERT_EMAIL_TITLE = "Username Update Alert";
+export const USERNAME_UPDATE_ALERT_IMAGE_URL =
+  "https://user-images.githubusercontent.com/59534570/205953467-e60d4683-ea80-40c0-9aa2-b885663de0d3.png";
+export const USERNAME_UPDATE_ALERT_IMAGE_URL_ALT = "Username Update Alert";
+export const USERNAME_UPDATE_ALERT_TITLE_ONE = "YOUR USERNAME";
+export const USERNAME_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
+export const USERNAME_UPDATE_ALERT_SUBTITLE =
+  "If you did not update your username, please contact us immediately.";
+
+// ? Password update alert email constants
+
+export const PASSWORD_UPDATE_ALERT_EMAIL_TITLE = "Password Update Alert";
+export const PASSWORD_UPDATE_ALERT_IMAGE_URL =
+  "https://user-images.githubusercontent.com/59534570/205953467-e60d4683-ea80-40c0-9aa2-b885663de0d3.png";
+export const PASSWORD_UPDATE_ALERT_IMAGE_URL_ALT = "Password Update Alert";
+export const PASSWORD_UPDATE_ALERT_TITLE_ONE = "YOUR PASSWORD";
+export const PASSWORD_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
+export const PASSWORD_UPDATE_ALERT_SUBTITLE =
+  "If you did not update your password, please contact us immediately.";
+
+// ? Email address update alert email constants
+
+export const EMAIL_ADDRESS_UPDATE_ALERT_EMAIL_TITLE =
+  "Email Address Update Alert";
+export const EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL =
+  "https://user-images.githubusercontent.com/59534570/205953467-e60d4683-ea80-40c0-9aa2-b885663de0d3.png";
+export const EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL_ALT =
+  "Email Address Update Alert";
+export const EMAIL_ADDRESS_UPDATE_ALERT_TITLE_ONE = "YOUR EMAIL ADDRESS";
+export const EMAIL_ADDRESS_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
+export const EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE =
+  "If you did not update your email address, please contact us immediately.";

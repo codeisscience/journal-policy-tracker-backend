@@ -15,7 +15,10 @@ import { COOKIE_NAME, __prod__ } from "./constants";
 import { journalMiddleware } from "./middlewares/journalMiddleware";
 import {
   accountVerificationEmail,
+  emailAddressUpdateAlertEmail,
   forgotPasswordEmail,
+  passwordUpdateAlertEmail,
+  usernameUpdateAlertEmail,
   verifyNewEmailAddressEmail,
 } from "./utils/emailForms";
 
@@ -33,6 +36,18 @@ const startServer = async () => {
 
     app.get("/verify-new-email-address-template", function (req, res) {
       res.send(verifyNewEmailAddressEmail(process.env.CORS_ORIGIN));
+    });
+
+    app.get("/username-update-alert-template", function (req, res) {
+      res.send(usernameUpdateAlertEmail(process.env.CORS_ORIGIN));
+    });
+
+    app.get("/password-update-alert-template", function (req, res) {
+      res.send(passwordUpdateAlertEmail(process.env.CORS_ORIGIN));
+    });
+
+    app.get("/email-address-update-alert-template", function (req, res) {
+      res.send(emailAddressUpdateAlertEmail(process.env.CORS_ORIGIN));
     });
   }
 

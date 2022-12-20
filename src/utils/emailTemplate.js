@@ -27,7 +27,7 @@ export const emailTemplate = (
   buttonText,
   buttonTextPointerTitle
 ) => {
-  return /*html*/ `
+  return /*htm*/ `
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
 	xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -530,49 +530,13 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
 										</tr>
 									</tbody>
 								</table>
-								<table border="0" cellpadding="0" cellspacing="0" class="mcnButtonBlock" style="border-collapse: collapse; mso-table-lspace: 0;
- mso-table-rspace: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
- min-width:100%;" width="100%">
-									<tbody class="mcnButtonBlockOuter">
-										<tr>
-											<td align="center" class="mcnButtonBlockInner" style="mso-line-height-rule:
- exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
- padding-top:18px; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top">
-												<table border="0" cellpadding="0" cellspacing="0" class="mcnButtonBlock" style="border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;
- -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; min-width:100%;" width="100%">
-													<tbody class="mcnButtonBlockOuter">
-														<tr>
-															<td align="center" class="mcnButtonBlockInner" style="mso-line-height-rule:
- exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
- padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top">
-																<table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer"
-																	style="border-collapse: collapse; mso-table-lspace: 0;
- mso-table-rspace: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
- border-collapse: separate !important;border-radius: 48px;background-color:
- #f84b4b;">
-																	<tbody>
-																		<tr>
-																			<td align="center" class="mcnButtonContent" style="mso-line-height-rule:
- exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
- font-family: 'Asap', Helvetica, sans-serif; font-size: 16px; padding-top:24px;
- padding-right:48px; padding-bottom:24px; padding-left:48px;" valign="middle">
-																				<a class="mcnButton " href="${buttonURL}" style="mso-line-height-rule: exactly;
- -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; display: block; color: #f84b4b;
- font-weight: normal; text-decoration: none; font-weight: normal;letter-spacing:
- 1px;line-height: 100%;text-align: center;text-decoration: none;color:
- #FFFFFF; text-transform:uppercase;" target="_blank" title="${buttonTextPointerTitle}">${buttonText}</a>
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+
+${
+  buttonURL
+    ? emailButtonHTML(buttonURL, buttonTextPointerTitle, buttonText)
+    : ""
+}
+
 								<table border="0" cellpadding="0" cellspacing="0" class="mcnImageBlock" style="border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;
  -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; min-width:100%;" width="100%">
 									<tbody class="mcnImageBlockOuter">
@@ -662,5 +626,52 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
 </body>
 
 </html>
+	`;
+};
+
+const emailButtonHTML = (buttonURL, buttonTextPointerTitle, buttonText) => {
+  return /*html*/ `
+<table border="0" cellpadding="0" cellspacing="0" class="mcnButtonBlock" style="border-collapse: collapse; mso-table-lspace: 0;
+ mso-table-rspace: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
+ min-width:100%;" width="100%">
+	<tbody class="mcnButtonBlockOuter">
+		<tr>
+			<td align="center" class="mcnButtonBlockInner" style="mso-line-height-rule:
+ exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
+ padding-top:18px; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top">
+				<table border="0" cellpadding="0" cellspacing="0" class="mcnButtonBlock" style="border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;
+ -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; min-width:100%;" width="100%">
+					<tbody class="mcnButtonBlockOuter">
+						<tr>
+							<td align="center" class="mcnButtonBlockInner" style="mso-line-height-rule:
+ exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
+ padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top">
+								<table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: collapse; mso-table-lspace: 0;
+ mso-table-rspace: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
+ border-collapse: separate !important;border-radius: 48px;background-color:
+ #f84b4b;">
+									<tbody>
+										<tr>
+											<td align="center" class="mcnButtonContent" style="mso-line-height-rule:
+ exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
+ font-family: 'Asap', Helvetica, sans-serif; font-size: 16px; padding-top:24px;
+ padding-right:48px; padding-bottom:24px; padding-left:48px;" valign="middle">
+												<a class="mcnButton " href="${buttonURL}" style="mso-line-height-rule: exactly;
+ -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; display: block; color: #f84b4b;
+ font-weight: normal; text-decoration: none; font-weight: normal;letter-spacing:
+ 1px;line-height: 100%;text-align: center;text-decoration: none;color:
+ #FFFFFF; text-transform:uppercase;" target="_blank" title="${buttonTextPointerTitle}">${buttonText}</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
 	`;
 };

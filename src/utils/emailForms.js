@@ -1,4 +1,4 @@
-import { emailTemplateWithLink } from "./emailTemplate";
+import { emailTemplate } from "./emailTemplate";
 import {
   ACCOUNT_VERIFICATION_BUTTON_POINTER_TEXT,
   ACCOUNT_VERIFICATION_BUTTON_TEXT,
@@ -26,10 +26,23 @@ import {
   NEW_EMAIL_ADDRESS_VERIFICATION_SUBTITLE,
   NEW_EMAIL_ADDRESS_VERIFICATION_BUTTON_TEXT,
   NEW_EMAIL_ADDRESS_VERIFICATION_BUTTON_POINTER_TEXT,
+  USERNAME_UPDATE_ALERT_EMAIL_TITLE,
+  USERNAME_UPDATE_ALERT_IMAGE_URL,
+  USERNAME_UPDATE_ALERT_IMAGE_URL_ALT,
+  USERNAME_UPDATE_ALERT_TITLE_ONE,
+  USERNAME_UPDATE_ALERT_TITLE_TWO,
+  USERNAME_UPDATE_ALERT_SUBTITLE,
+  PASSWORD_UPDATE_ALERT_EMAIL_TITLE,
+  EMAIL_ADDRESS_UPDATE_ALERT_EMAIL_TITLE,
+  EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL,
+  EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL_ALT,
+  EMAIL_ADDRESS_UPDATE_ALERT_TITLE_ONE,
+  EMAIL_ADDRESS_UPDATE_ALERT_TITLE_TWO,
+  EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE,
 } from "./emailConstants";
 
 export const accountVerificationEmail = (accountVerificationLink) => {
-  return emailTemplateWithLink(
+  return emailTemplate(
     accountVerificationLink,
     ACCOUNT_VERIFICATION_EMAIL_TITLE,
     LOGO_URL,
@@ -45,7 +58,7 @@ export const accountVerificationEmail = (accountVerificationLink) => {
 };
 
 export const forgotPasswordEmail = (forgotPasswordLink) => {
-  return emailTemplateWithLink(
+  return emailTemplate(
     forgotPasswordLink,
     FORGOT_PASSWORD_EMAIL_TITLE,
     LOGO_URL,
@@ -61,7 +74,7 @@ export const forgotPasswordEmail = (forgotPasswordLink) => {
 };
 
 export const verifyNewEmailAddressEmail = (forgotPasswordLink) => {
-  return emailTemplateWithLink(
+  return emailTemplate(
     forgotPasswordLink,
     NEW_EMAIL_ADDRESS_VERIFICATION_EMAIL_TITLE,
     LOGO_URL,
@@ -73,5 +86,53 @@ export const verifyNewEmailAddressEmail = (forgotPasswordLink) => {
     NEW_EMAIL_ADDRESS_VERIFICATION_SUBTITLE,
     NEW_EMAIL_ADDRESS_VERIFICATION_BUTTON_TEXT,
     NEW_EMAIL_ADDRESS_VERIFICATION_BUTTON_POINTER_TEXT
+  );
+};
+
+export const usernameUpdateAlertEmail = () => {
+  return emailTemplate(
+    "",
+    USERNAME_UPDATE_ALERT_EMAIL_TITLE,
+    LOGO_URL,
+    CODE_IS_SCIENCE_URL,
+    USERNAME_UPDATE_ALERT_IMAGE_URL,
+    USERNAME_UPDATE_ALERT_IMAGE_URL_ALT,
+    USERNAME_UPDATE_ALERT_TITLE_ONE,
+    USERNAME_UPDATE_ALERT_TITLE_TWO,
+    USERNAME_UPDATE_ALERT_SUBTITLE,
+    "",
+    ""
+  );
+};
+
+export const passwordUpdateAlertEmail = () => {
+  return emailTemplate(
+    "",
+    PASSWORD_UPDATE_ALERT_EMAIL_TITLE,
+    LOGO_URL,
+    CODE_IS_SCIENCE_URL,
+    USERNAME_UPDATE_ALERT_IMAGE_URL,
+    USERNAME_UPDATE_ALERT_IMAGE_URL_ALT,
+    USERNAME_UPDATE_ALERT_TITLE_ONE,
+    USERNAME_UPDATE_ALERT_TITLE_TWO,
+    USERNAME_UPDATE_ALERT_SUBTITLE,
+    "",
+    ""
+  );
+};
+
+export const emailAddressUpdateAlertEmail = () => {
+  return emailTemplate(
+    "",
+    EMAIL_ADDRESS_UPDATE_ALERT_EMAIL_TITLE,
+    LOGO_URL,
+    CODE_IS_SCIENCE_URL,
+    EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL,
+    EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL_ALT,
+    EMAIL_ADDRESS_UPDATE_ALERT_TITLE_ONE,
+    EMAIL_ADDRESS_UPDATE_ALERT_TITLE_TWO,
+    EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE,
+    "",
+    ""
   );
 };

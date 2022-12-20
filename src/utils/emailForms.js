@@ -41,6 +41,8 @@ import {
   EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE,
 } from "./emailConstants";
 
+// Verification Emails
+
 export const accountVerificationEmail = (accountVerificationLink) => {
   return emailTemplate(
     accountVerificationLink,
@@ -89,7 +91,9 @@ export const verifyNewEmailAddressEmail = (forgotPasswordLink) => {
   );
 };
 
-export const usernameUpdateAlertEmail = () => {
+// Alert Emails
+
+export const usernameUpdateAlertEmail = (newUsername, timeOfChange) => {
   return emailTemplate(
     "",
     USERNAME_UPDATE_ALERT_EMAIL_TITLE,
@@ -99,13 +103,13 @@ export const usernameUpdateAlertEmail = () => {
     USERNAME_UPDATE_ALERT_IMAGE_URL_ALT,
     USERNAME_UPDATE_ALERT_TITLE_ONE,
     USERNAME_UPDATE_ALERT_TITLE_TWO,
-    USERNAME_UPDATE_ALERT_SUBTITLE,
+    USERNAME_UPDATE_ALERT_SUBTITLE(newUsername, timeOfChange),
     "",
     ""
   );
 };
 
-export const passwordUpdateAlertEmail = () => {
+export const passwordUpdateAlertEmail = (timeOfChange) => {
   return emailTemplate(
     "",
     PASSWORD_UPDATE_ALERT_EMAIL_TITLE,
@@ -115,13 +119,13 @@ export const passwordUpdateAlertEmail = () => {
     USERNAME_UPDATE_ALERT_IMAGE_URL_ALT,
     USERNAME_UPDATE_ALERT_TITLE_ONE,
     USERNAME_UPDATE_ALERT_TITLE_TWO,
-    USERNAME_UPDATE_ALERT_SUBTITLE,
+    USERNAME_UPDATE_ALERT_SUBTITLE(timeOfChange),
     "",
     ""
   );
 };
 
-export const emailAddressUpdateAlertEmail = () => {
+export const emailAddressUpdateAlertEmail = (newEmailAddress, timeOfChange) => {
   return emailTemplate(
     "",
     EMAIL_ADDRESS_UPDATE_ALERT_EMAIL_TITLE,
@@ -131,7 +135,7 @@ export const emailAddressUpdateAlertEmail = () => {
     EMAIL_ADDRESS_UPDATE_ALERT_IMAGE_URL_ALT,
     EMAIL_ADDRESS_UPDATE_ALERT_TITLE_ONE,
     EMAIL_ADDRESS_UPDATE_ALERT_TITLE_TWO,
-    EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE,
+    EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE(newEmailAddress, timeOfChange),
     "",
     ""
   );

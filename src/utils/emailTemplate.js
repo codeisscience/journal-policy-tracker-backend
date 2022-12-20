@@ -14,7 +14,7 @@
  * @returns
  */
 
-export const emailTemplateWithLink = (
+export const emailTemplate = (
   buttonURL,
   emailTitle,
   logoURL,
@@ -664,4 +664,3 @@ text-decoration: none; height: auto; width: 200px; height: auto; margin: 0px;" w
 </html>
 	`;
 };
-

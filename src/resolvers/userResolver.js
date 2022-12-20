@@ -53,8 +53,19 @@ const userResolver = {
   Mutation: {
     register: async (_, { userInfo }, { req }) => {
       const { fullName, username, password, email } = userInfo;
-
       let user;
+
+      if (!validator.matches(username, "^[a-zA-Z0-9_-]+$")) {
+        return {
+          errors: [
+            {
+              field: "username",
+              message:
+                "username should only contain alphanumeric, - and _ characters",
+            },
+          ],
+        };
+      }
 
       try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);

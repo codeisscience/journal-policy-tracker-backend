@@ -13,6 +13,7 @@ import {
   accountVerificationEmail,
   emailAddressUpdateAlertEmail,
   forgotPasswordEmail,
+  usernameUpdateAlertEmail,
   verifyNewEmailAddressEmail,
 } from "../utils/emailForms";
 import generateMockUsersArray from "../utils/generateUserData";
@@ -515,23 +516,31 @@ const userResolver = {
     },
 
     changeUsername: async (_, { newUsername }, { req }) => {
-      const { username } = await User.findById(req.session.userId);
-
-      if (username === newUsername) {
-        return {
-          errors: [
-            {
-              field: "username",
-              message: "old and new username are same",
-            },
-          ],
-        };
-      }
-
       try {
-        await User.findByIdAndUpdate(req.session.userId, {
+        const { username } = await User.findById(req.session.userId);
+
+        if (username === newUsername) {
+          return {
+            errors: [
+              {
+                field: "username",
+                message: "old and new username are same",
+              },
+            ],
+          };
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(req.session.userId, {
           username: newUsername,
         });
+
+        const emailResult = await sendEmail(
+          updatedUser.email,
+          "Username Changed",
+          usernameUpdateAlertEmail(newUsername, getCurrentDateAndTime())
+        );
+
+        console.log({ emailResult });
       } catch (error) {
         if (
           error.code === 11000 &&

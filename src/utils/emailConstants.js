@@ -1,7 +1,15 @@
+import dayjs from "dayjs";
+
 // ? Common Email Constants
 export const LOGO_URL =
   "https://codeisscience-community.netlify.app/img/brand.png";
 export const CODE_IS_SCIENCE_URL = "https://codeisscience.com";
+
+export const SAMPLE_EMAIL_ADDRESS = "sample-email@sample-email.com";
+export const SAMPLE_USERNAME = "sample-username";
+export const CURRENT_DATE_AND_TIME = dayjs().format(
+  "DD-MMM-YYYY HH:mm:ss Z [UTC]"
+);
 
 // ? Forgot Password Email Constants
 export const FORGOT_PASSWORD_EMAIL_TITLE = "Reset Your Password";
@@ -60,7 +68,7 @@ export const USERNAME_UPDATE_ALERT_IMAGE_URL_ALT = "Username Update Alert";
 export const USERNAME_UPDATE_ALERT_TITLE_ONE = "YOUR USERNAME";
 export const USERNAME_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
 export const USERNAME_UPDATE_ALERT_SUBTITLE = (newUsername, timeOfChange) =>
-  `Your Code Is Science username was updated to ${newUsername} at ${timeOfChange}. If you did not update your username, please contact us immediately.`;
+  `Your Code Is Science <i> username </i> was updated <br> <b> TO: </b> <i> ${newUsername} </i> <br> <b> AT: </b> <i> ${timeOfChange} </i> <br>`;
 
 // ? Password update alert email constants
 
@@ -71,7 +79,7 @@ export const PASSWORD_UPDATE_ALERT_IMAGE_URL_ALT = "Password Update Alert";
 export const PASSWORD_UPDATE_ALERT_TITLE_ONE = "YOUR PASSWORD";
 export const PASSWORD_UPDATE_ALERT_TITLE_TWO = "WAS UPDATED";
 export const PASSWORD_UPDATE_ALERT_SUBTITLE = (timeOfChange) =>
-  `Your Code Is Science password was updated at ${timeOfChange}. If you did not update your password, please contact us immediately.`;
+  `Your Code Is Science <i> password </i> was updated <br> <b> AT: </b> <i> ${timeOfChange} </i> <br>`;
 
 // ? Email address update alert email constants
 
@@ -87,4 +95,4 @@ export const EMAIL_ADDRESS_UPDATE_ALERT_SUBTITLE = (
   newEmailAddress,
   timeOfChange
 ) =>
-  `Your Code Is Science email address was updated to ${newEmailAddress} at ${timeOfChange}. If you did not update your email address, please contact us immediately.`;
+  `Your Code Is Science <i> email address </i> was updated <br> <b> TO: </b> <i> ${newEmailAddress} </i> <br> <b> AT: </b> <i> ${timeOfChange} </i> <br>`;

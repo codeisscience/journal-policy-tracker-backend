@@ -21,6 +21,11 @@ import {
   usernameUpdateAlertEmail,
   verifyNewEmailAddressEmail,
 } from "./utils/emailForms";
+import {
+  CURRENT_DATE_AND_TIME,
+  SAMPLE_EMAIL_ADDRESS,
+  SAMPLE_USERNAME,
+} from "./utils/emailConstants";
 
 const startServer = async () => {
   const app = express();
@@ -39,15 +44,22 @@ const startServer = async () => {
     });
 
     app.get("/username-update-alert-template", function (req, res) {
-      res.send(usernameUpdateAlertEmail(process.env.CORS_ORIGIN));
+      res.send(
+        usernameUpdateAlertEmail(SAMPLE_USERNAME, CURRENT_DATE_AND_TIME)
+      );
     });
 
     app.get("/password-update-alert-template", function (req, res) {
-      res.send(passwordUpdateAlertEmail(process.env.CORS_ORIGIN));
+      res.send(passwordUpdateAlertEmail(CURRENT_DATE_AND_TIME));
     });
 
     app.get("/email-address-update-alert-template", function (req, res) {
-      res.send(emailAddressUpdateAlertEmail(process.env.CORS_ORIGIN));
+      res.send(
+        emailAddressUpdateAlertEmail(
+          SAMPLE_EMAIL_ADDRESS,
+          CURRENT_DATE_AND_TIME
+        )
+      );
     });
   }
 

@@ -3,19 +3,21 @@ import { v4 } from "uuid";
 import validator from "validator";
 import {
   ACCOUNT_VERIFICATION_PREFIX,
-  VERIFY_NEW_EMAIL_ADDRESS_PREFIX,
   COOKIE_NAME,
   FORGET_PASSWORD_PREFIX,
   NEW_EMAIL_ADDRESS_PREFIX,
+  VERIFY_NEW_EMAIL_ADDRESS_PREFIX,
 } from "../constants";
 import { User } from "../models/User";
-import generateMockUsersArray from "../utils/generateUserData";
-import { sendEmail } from "../utils/sendEmail";
 import {
   accountVerificationEmail,
+  emailAddressUpdateAlertEmail,
   forgotPasswordEmail,
   verifyNewEmailAddressEmail,
 } from "../utils/emailForms";
+import generateMockUsersArray from "../utils/generateUserData";
+import { getCurrentDateAndTime } from "../utils/getCurrentDateAndTime";
+import { sendEmail } from "../utils/sendEmail";
 
 const saltRounds = 12;
 
@@ -245,7 +247,9 @@ const userResolver = {
           NEW_EMAIL_ADDRESS_PREFIX + token
         );
 
-        const user = await User.findByIdAndUpdate(
+        const user = await User.findById(userId);
+
+        const updatedUser = await User.findByIdAndUpdate(
           userId,
           { email: newEmailAddress },
           { new: true }
@@ -254,7 +258,17 @@ const userResolver = {
         await redis.del(VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token);
         await redis.del(NEW_EMAIL_ADDRESS_PREFIX + token);
 
-        return { user };
+        // send alert email to old email address that the email address has been changed
+        console.log({ user });
+        const emailResult = await sendEmail(
+          user.email,
+          "Email Address Changed",
+          emailAddressUpdateAlertEmail(newEmailAddress, getCurrentDateAndTime())
+        );
+
+        console.log({ emailResult });
+
+        return { user: updatedUser };
       } catch (error) {
         console.log({ changeEmailAddressError: error });
         return error;

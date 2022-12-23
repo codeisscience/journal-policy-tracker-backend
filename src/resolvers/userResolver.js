@@ -13,6 +13,7 @@ import {
   accountVerificationEmail,
   emailAddressUpdateAlertEmail,
   forgotPasswordEmail,
+  passwordUpdateAlertEmail,
   usernameUpdateAlertEmail,
   verifyNewEmailAddressEmail,
 } from "../utils/emailForms";
@@ -260,7 +261,6 @@ const userResolver = {
         await redis.del(NEW_EMAIL_ADDRESS_PREFIX + token);
 
         // send alert email to old email address that the email address has been changed
-        console.log({ user });
         const emailResult = await sendEmail(
           user.email,
           "Email Address Changed",
@@ -452,35 +452,46 @@ const userResolver = {
     },
 
     changePassword: async (_, { oldPassword, newPassword }, { req }) => {
-      const { password } = await User.findById(req.session.userId);
-      const isOldPasswordCorrect = await bcrypt.compare(oldPassword, password);
-
-      if (!isOldPasswordCorrect) {
-        return {
-          errors: [
-            {
-              field: "password",
-              message: "old password does not match",
-            },
-          ],
-        };
-      }
-
-      if (newPassword.length <= 3) {
-        return {
-          errors: [
-            {
-              field: "newPassword",
-              message: "length must be greater than 3",
-            },
-          ],
-        };
-      }
-
       try {
-        await User.findByIdAndUpdate(req.session.userId, {
+        const { password } = await User.findById(req.session.userId);
+        const isOldPasswordCorrect = await bcrypt.compare(
+          oldPassword,
+          password
+        );
+
+        if (!isOldPasswordCorrect) {
+          return {
+            errors: [
+              {
+                field: "password",
+                message: "old password does not match",
+              },
+            ],
+          };
+        }
+
+        if (newPassword.length <= 3) {
+          return {
+            errors: [
+              {
+                field: "newPassword",
+                message: "length must be greater than 3",
+              },
+            ],
+          };
+        }
+
+        const currentUser = await User.findByIdAndUpdate(req.session.userId, {
           password: await bcrypt.hash(newPassword, saltRounds),
         });
+
+        const emailResult = await sendEmail(
+          currentUser.email,
+          "Password Updated",
+          passwordUpdateAlertEmail(getCurrentDateAndTime())
+        );
+
+        console.log({ emailResult });
       } catch (error) {
         console.log(error);
       }

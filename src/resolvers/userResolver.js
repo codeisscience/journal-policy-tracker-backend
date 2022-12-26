@@ -60,6 +60,18 @@ const userResolver = {
 
       let user;
 
+      if (!validator.isAlphanumeric(username, "en-US", { ignore: "_-" })) {
+        return {
+          errors: [
+            {
+              field: "username",
+              message:
+                "username can only contain letters, numbers, underscores (_) and dashes (-)",
+            },
+          ],
+        };
+      }
+
       try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -529,6 +541,18 @@ const userResolver = {
     changeUsername: async (_, { newUsername }, { req }) => {
       try {
         const { username } = await User.findById(req.session.userId);
+
+        if (!validator.isAlphanumeric(newUsername, "en-US", { ignore: "_-" })) {
+          return {
+            errors: [
+              {
+                field: "username",
+                message:
+                  "username can only contain letters, numbers, underscores (_) and dashes (-)",
+              },
+            ],
+          };
+        }
 
         if (username === newUsername) {
           return {

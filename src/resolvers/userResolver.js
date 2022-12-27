@@ -60,6 +60,17 @@ const userResolver = {
 
       let user;
 
+      if (!validator.isLength(fullName, { min: 3, max: 50 })) {
+        return {
+          errors: [
+            {
+              field: "fullName",
+              message: "full name must be between 3 and 50 characters long",
+            },
+          ],
+        };
+      }
+
       if (!validator.isAlphanumeric(username, "en-US", { ignore: "_-" })) {
         return {
           errors: [
@@ -514,6 +525,17 @@ const userResolver = {
 
     changeFullName: async (_, { newFullName }, { req }) => {
       const { fullName } = await User.findById(req.session.userId);
+
+      if (!validator.isLength(newFullName, { min: 3, max: 50 })) {
+        return {
+          errors: [
+            {
+              field: "fullName",
+              message: "full name must be between 3 and 50 characters long",
+            },
+          ],
+        };
+      }
 
       if (newFullName === fullName) {
         return {

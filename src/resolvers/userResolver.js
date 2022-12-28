@@ -83,6 +83,17 @@ const userResolver = {
         };
       }
 
+      if (!validator.isEmail(email)) {
+        return {
+          errors: [
+            {
+              field: "email",
+              message: "invalid email address",
+            },
+          ],
+        };
+      }
+
       try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 

@@ -94,6 +94,27 @@ const userResolver = {
         };
       }
 
+      if (
+        !validator.isStrongPassword(password, {
+          minLength: 8,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+          returnScore: false,
+        })
+      ) {
+        return {
+          errors: [
+            {
+              field: "password",
+              message:
+                "password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol",
+            },
+          ],
+        };
+      }
+
       try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -414,12 +435,22 @@ const userResolver = {
 
     changeForgotPassword: async (_, { token, newPassword }, { redis, req }) => {
       try {
-        if (newPassword.length <= 3) {
+        if (
+          !validator.isStrongPassword(newPassword, {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1,
+            returnScore: false,
+          })
+        ) {
           return {
             errors: [
               {
-                field: "newPassword",
-                message: "length must be greater than 3",
+                field: "password",
+                message:
+                  "password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol",
               },
             ],
           };
@@ -504,12 +535,22 @@ const userResolver = {
           };
         }
 
-        if (newPassword.length <= 3) {
+        if (
+          !validator.isStrongPassword(newPassword, {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1,
+            returnScore: false,
+          })
+        ) {
           return {
             errors: [
               {
-                field: "newPassword",
-                message: "length must be greater than 3",
+                field: "password",
+                message:
+                  "password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol",
               },
             ],
           };

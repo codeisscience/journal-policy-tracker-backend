@@ -40,9 +40,6 @@ export async function sendEmail(to, subject, html) {
 
     const emailInfo = await transport.sendMail(mailOptions);
 
-    // console.log("Message sent: %s", emailInfo.messageId);
-    // console.log("Preview URL: %s", getTestMessageUrl(emailInfo));
-
     return emailInfo;
   } catch (error) {
     return error;

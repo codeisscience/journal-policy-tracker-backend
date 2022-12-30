@@ -143,7 +143,6 @@ const userResolver = {
             errors: [{ field: "email", message: "email already taken" }],
           };
         } else {
-          console.log({ registerError: error });
           return error;
         }
       }
@@ -276,11 +275,8 @@ const userResolver = {
           )
         );
 
-        console.log({ emailResult });
-
         return { user: currentUser };
       } catch (error) {
-        console.log({ changeEmailAddressError: error });
         return error;
       }
     },
@@ -322,11 +318,8 @@ const userResolver = {
           emailAddressUpdateAlertEmail(newEmailAddress, getCurrentDateAndTime())
         );
 
-        console.log({ emailResult });
-
         return { user: updatedUser };
       } catch (error) {
-        console.log({ changeEmailAddressError: error });
         return error;
       }
     },
@@ -351,11 +344,8 @@ const userResolver = {
           )
         );
 
-        console.log({ accountVerificationEmailResults });
-
         return true;
       } catch (error) {
-        console.log({ sendVerificationEmailError: error });
         return error;
       }
     },
@@ -397,7 +387,6 @@ const userResolver = {
 
         return { user };
       } catch (error) {
-        console.log({ verifyUserAccountError: error });
         return error;
       }
     },
@@ -425,11 +414,9 @@ const userResolver = {
           )
         );
 
-        console.log({ emailResult });
-
         return true;
       } catch (error) {
-        console.log(error);
+        return error;
       }
     },
 
@@ -493,7 +480,7 @@ const userResolver = {
 
         return { user };
       } catch (error) {
-        console.log(error);
+        return error;
       }
     },
 
@@ -506,7 +493,6 @@ const userResolver = {
             secure: true,
           });
           if (err) {
-            console.log(err);
             resolve(false);
             return;
           }
@@ -565,10 +551,8 @@ const userResolver = {
           "Password Updated",
           passwordUpdateAlertEmail(getCurrentDateAndTime())
         );
-
-        console.log({ emailResult });
       } catch (error) {
-        console.log(error);
+        return error;
       }
 
       let updatedUser = await User.findById(req.session.userId);
@@ -605,7 +589,7 @@ const userResolver = {
           fullName: newFullName,
         });
       } catch (error) {
-        console.log(error);
+        return error;
       }
 
       let updatedUser = await User.findById(req.session.userId);
@@ -648,8 +632,6 @@ const userResolver = {
           "Username Changed",
           usernameUpdateAlertEmail(newUsername, getCurrentDateAndTime())
         );
-
-        console.log({ emailResult });
       } catch (error) {
         if (
           error.code === 11000 &&
@@ -675,7 +657,6 @@ const userResolver = {
         const generatedUsers = generateMockUsersArray(numberOfUsers);
         await User.insertMany(generatedUsers);
       } catch (error) {
-        console.log(error);
         return false;
       }
 

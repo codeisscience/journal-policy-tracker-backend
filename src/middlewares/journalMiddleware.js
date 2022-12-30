@@ -19,7 +19,7 @@ export const journalMiddleware = {
           { safe: true }
         );
       } catch (error) {
-        console.log(error);
+        return error;
       }
 
       return resolve(parent, args, context, info);

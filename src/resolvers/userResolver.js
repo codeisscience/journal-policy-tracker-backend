@@ -32,90 +32,101 @@ const userResolver = {
 
   Query: {
     getCurrentUser: async (_, _args, { req }) => {
-      if (!req.session.userId) {
-        return null;
-      }
+      try {
+        if (!req.session.userId) {
+          return null;
+        }
 
-      return await User.findById(req.session.userId);
+        return await User.findById(req.session.userId);
+      } catch (error) {
+        return error;
+      }
     },
 
     getUserById: async (_, { userId }) => {
-      return await User.findById(userId);
+      try {
+        return await User.findById(userId);
+      } catch (error) {
+        return error;
+      }
     },
 
     getAllUsers: async (_, { currentPageNumber, limitValue }) => {
-      const skipValue = (currentPageNumber - 1) * limitValue;
-      const totalUsers = User.count();
-      const users = await User.find().limit(limitValue).skip(skipValue);
-      return {
-        users,
-        totalUsers,
-      };
+      try {
+        const skipValue = (currentPageNumber - 1) * limitValue;
+        const totalUsers = User.count();
+        const users = await User.find().limit(limitValue).skip(skipValue);
+        return {
+          users,
+          totalUsers,
+        };
+      } catch (error) {
+        return error;
+      }
     },
   },
 
   Mutation: {
     register: async (_, { userInfo }, { req }) => {
-      const { fullName, username, password, email } = userInfo;
-
-      let user;
-
-      if (!validator.isLength(fullName, { min: 3, max: 50 })) {
-        return {
-          errors: [
-            {
-              field: "fullName",
-              message: "full name must be between 3 and 50 characters long",
-            },
-          ],
-        };
-      }
-
-      if (!validator.isAlphanumeric(username, "en-US", { ignore: "_-" })) {
-        return {
-          errors: [
-            {
-              field: "username",
-              message:
-                "username can only contain letters, numbers, underscores (_) and dashes (-)",
-            },
-          ],
-        };
-      }
-
-      if (!validator.isEmail(email)) {
-        return {
-          errors: [
-            {
-              field: "email",
-              message: "invalid email address",
-            },
-          ],
-        };
-      }
-
-      if (
-        !validator.isStrongPassword(password, {
-          minLength: 8,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1,
-          returnScore: false,
-        })
-      ) {
-        return {
-          errors: [
-            {
-              field: "password",
-              message:
-                "password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol",
-            },
-          ],
-        };
-      }
-
       try {
+        const { fullName, username, password, email } = userInfo;
+
+        let user;
+        if (!validator.isLength(fullName, { min: 3, max: 50 })) {
+          return {
+            errors: [
+              {
+                field: "fullName",
+                message: "full name must be between 3 and 50 characters long",
+              },
+            ],
+          };
+        }
+
+        if (!validator.isAlphanumeric(username, "en-US", { ignore: "_-" })) {
+          return {
+            errors: [
+              {
+                field: "username",
+                message:
+                  "username can only contain letters, numbers, underscores (_) and dashes (-)",
+              },
+            ],
+          };
+        }
+
+        if (!validator.isEmail(email)) {
+          return {
+            errors: [
+              {
+                field: "email",
+                message: "invalid email address",
+              },
+            ],
+          };
+        }
+
+        if (
+          !validator.isStrongPassword(password, {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1,
+            returnScore: false,
+          })
+        ) {
+          return {
+            errors: [
+              {
+                field: "password",
+                message:
+                  "password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol",
+              },
+            ],
+          };
+        }
+
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         user = new User({
@@ -127,6 +138,9 @@ const userResolver = {
         });
 
         const insertedUser = await user.save();
+
+        req.session.userId = user.id;
+        return { user };
       } catch (error) {
         if (
           error.code === 11000 &&
@@ -146,47 +160,48 @@ const userResolver = {
           return error;
         }
       }
-
-      req.session.userId = user.id;
-      return { user };
     },
 
     login: async (_, { userInfo }, { req }) => {
-      const { usernameOrEmail, password } = userInfo;
+      try {
+        const { usernameOrEmail, password } = userInfo;
 
-      let user;
-      if (!validator.isEmail(usernameOrEmail)) {
-        user = await User.findOne({ username: usernameOrEmail });
-      } else {
-        user = await User.findOne({ email: usernameOrEmail });
+        let user;
+        if (!validator.isEmail(usernameOrEmail)) {
+          user = await User.findOne({ username: usernameOrEmail });
+        } else {
+          user = await User.findOne({ email: usernameOrEmail });
+        }
+
+        if (!user) {
+          return {
+            errors: [
+              {
+                field: "usernameOrEmail",
+                message: "that username or email does not exist",
+              },
+            ],
+          };
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+          return {
+            errors: [
+              {
+                field: "password",
+                message: "incorrect password",
+              },
+            ],
+          };
+        }
+
+        req.session.userId = user.id;
+        return { user };
+      } catch (error) {
+        return error;
       }
-
-      if (!user) {
-        return {
-          errors: [
-            {
-              field: "usernameOrEmail",
-              message: "that username or email does not exist",
-            },
-          ],
-        };
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
-        return {
-          errors: [
-            {
-              field: "password",
-              message: "incorrect password",
-            },
-          ],
-        };
-      }
-
-      req.session.userId = user.id;
-      return { user };
     },
 
     sendNewEmailAddressVerificationEmail: async (
@@ -485,21 +500,25 @@ const userResolver = {
     },
 
     logout: (_, __, { req, res }) => {
-      return new Promise((resolve) =>
-        req.session.destroy((err) => {
-          res.clearCookie(COOKIE_NAME, {
-            // Cookie options should be changed or removed before we go in prod
-            sameSite: "none",
-            secure: true,
-          });
-          if (err) {
-            resolve(false);
-            return;
-          }
+      try {
+        return new Promise((resolve) =>
+          req.session.destroy((err) => {
+            res.clearCookie(COOKIE_NAME, {
+              // Cookie options should be changed or removed before we go in prod
+              sameSite: "none",
+              secure: true,
+            });
+            if (err) {
+              resolve(false);
+              return;
+            }
 
-          resolve(true);
-        })
-      );
+            resolve(true);
+          })
+        );
+      } catch (error) {
+        return error;
+      }
     },
 
     changePassword: async (_, { oldPassword, newPassword }, { req }) => {
@@ -542,58 +561,64 @@ const userResolver = {
           };
         }
 
-        const currentUser = await User.findByIdAndUpdate(req.session.userId, {
-          password: await bcrypt.hash(newPassword, saltRounds),
-        });
+        const currentUser = await User.findByIdAndUpdate(
+          req.session.userId,
+          {
+            password: await bcrypt.hash(newPassword, saltRounds),
+          },
+          { new: true }
+        );
 
         const emailResult = await sendEmail(
           currentUser.email,
           "Password Updated",
           passwordUpdateAlertEmail(getCurrentDateAndTime())
         );
+
+        return { user: updatedUser };
       } catch (error) {
         return error;
       }
-
-      let updatedUser = await User.findById(req.session.userId);
-      return { user: updatedUser };
     },
 
     changeFullName: async (_, { newFullName }, { req }) => {
-      const { fullName } = await User.findById(req.session.userId);
-
-      if (!validator.isLength(newFullName, { min: 3, max: 50 })) {
-        return {
-          errors: [
-            {
-              field: "fullName",
-              message: "full name must be between 3 and 50 characters long",
-            },
-          ],
-        };
-      }
-
-      if (newFullName === fullName) {
-        return {
-          errors: [
-            {
-              field: "fullName",
-              message: "old and new full name are same",
-            },
-          ],
-        };
-      }
-
       try {
-        await User.findByIdAndUpdate(req.session.userId, {
-          fullName: newFullName,
-        });
+        const { fullName } = await User.findById(req.session.userId);
+
+        if (!validator.isLength(newFullName, { min: 3, max: 50 })) {
+          return {
+            errors: [
+              {
+                field: "fullName",
+                message: "full name must be between 3 and 50 characters long",
+              },
+            ],
+          };
+        }
+
+        if (newFullName === fullName) {
+          return {
+            errors: [
+              {
+                field: "fullName",
+                message: "old and new full name are same",
+              },
+            ],
+          };
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+          req.session.userId,
+          {
+            fullName: newFullName,
+          },
+          { new: true }
+        );
+
+        return { user: updatedUser };
       } catch (error) {
         return error;
       }
-
-      let updatedUser = await User.findById(req.session.userId);
-      return { user: updatedUser };
     },
 
     changeUsername: async (_, { newUsername }, { req }) => {
@@ -623,15 +648,19 @@ const userResolver = {
           };
         }
 
-        const updatedUser = await User.findByIdAndUpdate(req.session.userId, {
-          username: newUsername,
-        });
+        const updatedUser = await User.findByIdAndUpdate(
+          req.session.userId,
+          { username: newUsername },
+          { new: true }
+        );
 
         const emailResult = await sendEmail(
           updatedUser.email,
           "Username Changed",
           usernameUpdateAlertEmail(newUsername, getCurrentDateAndTime())
         );
+
+        return { user: updatedUser };
       } catch (error) {
         if (
           error.code === 11000 &&
@@ -647,9 +676,6 @@ const userResolver = {
           };
         }
       }
-
-      let updatedUser = await User.findById(req.session.userId);
-      return { user: updatedUser };
     },
 
     addMockUserData: async (_, { numberOfUsers }) => {

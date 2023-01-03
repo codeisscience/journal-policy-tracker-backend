@@ -18,13 +18,17 @@ const journalResolver = {
 
   Query: {
     getAllJournals: async (_, { currentPageNumber, limitValue }) => {
-      const skipValue = (currentPageNumber - 1) * limitValue;
-      const totalJournals = await Journal.count();
-      const journals = await Journal.find()
-        .sort({ createdAt: -1 })
-        .limit(limitValue)
-        .skip(skipValue);
-      return { journals, totalJournals };
+      try {
+        const skipValue = (currentPageNumber - 1) * limitValue;
+        const totalJournals = await Journal.count();
+        const journals = await Journal.find()
+          .sort({ createdAt: -1 })
+          .limit(limitValue)
+          .skip(skipValue);
+        return { journals, totalJournals };
+      } catch (error) {
+        return error;
+      }
     },
 
     getAllJournalsByCurrentUser: async (
@@ -32,48 +36,60 @@ const journalResolver = {
       { currentPageNumber, limitValue },
       { req }
     ) => {
-      const skipValue = (currentPageNumber - 1) * limitValue;
+      try {
+        const skipValue = (currentPageNumber - 1) * limitValue;
 
-      const currentUser = await User.findById(req.session.userId);
+        const currentUser = await User.findById(req.session.userId);
 
-      const numberOfJournalsByCurrentUser = currentUser.journals.length;
+        const numberOfJournalsByCurrentUser = currentUser.journals.length;
 
-      const allJournalsByCurrentUser = await Journal.find({
-        _id: { $in: currentUser.journals },
-      })
-        .limit(limitValue)
-        .skip(skipValue);
+        const allJournalsByCurrentUser = await Journal.find({
+          _id: { $in: currentUser.journals },
+        })
+          .limit(limitValue)
+          .skip(skipValue);
 
-      return {
-        journals: allJournalsByCurrentUser,
-        totalJournals: numberOfJournalsByCurrentUser,
-      };
+        return {
+          journals: allJournalsByCurrentUser,
+          totalJournals: numberOfJournalsByCurrentUser,
+        };
+      } catch (error) {
+        return error;
+      }
     },
 
     getAllJournalsByUserId: async (
       _,
       { userId, currentPageNumber, limitValue }
     ) => {
-      const skipValue = (currentPageNumber - 1) * limitValue;
+      try {
+        const skipValue = (currentPageNumber - 1) * limitValue;
 
-      const user = await User.findById(userId);
+        const user = await User.findById(userId);
 
-      const numberOfJournalsByUser = user.journals.length;
+        const numberOfJournalsByUser = user.journals.length;
 
-      const allJournalsByUser = await Journal.find({
-        _id: { $in: user.journals },
-      })
-        .limit(limitValue)
-        .skip(skipValue);
+        const allJournalsByUser = await Journal.find({
+          _id: { $in: user.journals },
+        })
+          .limit(limitValue)
+          .skip(skipValue);
 
-      return {
-        journals: allJournalsByUser,
-        totalJournals: numberOfJournalsByUser,
-      };
+        return {
+          journals: allJournalsByUser,
+          totalJournals: numberOfJournalsByUser,
+        };
+      } catch (error) {
+        return error;
+      }
     },
 
     getJournalByISSN: async (_, { issn }) => {
-      return await Journal.findOne({ issn });
+      try {
+        return await Journal.findOne({ issn });
+      } catch (error) {
+        return error;
+      }
     },
   },
 
@@ -109,27 +125,40 @@ const journalResolver = {
     },
 
     deleteJournal: async (_, { issnToDelete }) => {
-      const { deletedCount } = await Journal.deleteOne({ issn: issnToDelete });
+      try {
+        const { deletedCount } = await Journal.deleteOne({
+          issn: issnToDelete,
+        });
 
-      if (deletedCount === 0) {
-        return false;
+        if (deletedCount === 0) {
+          return false;
+        }
+
+        return true;
+      } catch (error) {
+        return error;
       }
-
-      return true;
     },
 
     updateJournal: async (_, { issnToUpdate, newJournalDetails }) => {
-      const journalToUpdate = await Journal.findOne({ issn: issnToUpdate });
-
-      if (!journalToUpdate) {
-        return {
-          errors: [{ field: "issn", message: "issn not available" }],
-        };
-      }
-
-      const { id } = journalToUpdate;
       try {
-        await Journal.findByIdAndUpdate(id, { ...newJournalDetails });
+        const journalToUpdate = await Journal.findOne({ issn: issnToUpdate });
+
+        if (!journalToUpdate) {
+          return {
+            errors: [{ field: "issn", message: "issn not available" }],
+          };
+        }
+
+        const { id } = journalToUpdate;
+
+        const updatedJournal = await Journal.findByIdAndUpdate(
+          id,
+          { ...newJournalDetails },
+          { new: true }
+        );
+
+        return { journal: updatedJournal };
       } catch (error) {
         if (error.code === 11000 && Object.keys(error.keyValue)[0] === "issn") {
           return {
@@ -142,9 +171,6 @@ const journalResolver = {
           };
         }
       }
-
-      const updatedJournal = await Journal.findById(id);
-      return { journal: updatedJournal };
     },
 
     addMockJournalData: async (_, { numberOfJournals, userId }) => {

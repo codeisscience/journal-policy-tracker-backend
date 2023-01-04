@@ -72,7 +72,9 @@ const userResolver = {
         const { fullName, username, password, email } = userInfo;
 
         let user;
-        if (!validator.isLength(fullName, { min: 3, max: 50 })) {
+        let trimmedFullName = fullName.trim();
+
+        if (!validator.isLength(trimmedFullName, { min: 3, max: 50 })) {
           return {
             errors: [
               {
@@ -130,7 +132,7 @@ const userResolver = {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         user = new User({
-          fullName,
+          fullName: trimmedFullName,
           username,
           email,
           password: hashedPassword,
@@ -585,7 +587,9 @@ const userResolver = {
       try {
         const { fullName } = await User.findById(req.session.userId);
 
-        if (!validator.isLength(newFullName, { min: 3, max: 50 })) {
+        const trimmedNewFullName = newFullName.trim();
+
+        if (!validator.isLength(trimmedNewFullName, { min: 3, max: 50 })) {
           return {
             errors: [
               {
@@ -596,7 +600,7 @@ const userResolver = {
           };
         }
 
-        if (newFullName === fullName) {
+        if (trimmedNewFullName === fullName) {
           return {
             errors: [
               {
@@ -610,7 +614,7 @@ const userResolver = {
         const updatedUser = await User.findByIdAndUpdate(
           req.session.userId,
           {
-            fullName: newFullName,
+            fullName: trimmedNewFullName,
           },
           { new: true }
         );

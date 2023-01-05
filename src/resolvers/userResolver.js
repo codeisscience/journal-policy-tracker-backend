@@ -5,16 +5,14 @@ import {
   ACCOUNT_VERIFICATION_PREFIX,
   COOKIE_NAME,
   FORGET_PASSWORD_PREFIX,
-  NEW_EMAIL_ADDRESS_PREFIX,
-  VERIFY_NEW_EMAIL_ADDRESS_PREFIX,
 } from "../constants";
 import { User } from "../models/User";
 import {
   accountVerificationEmail,
   forgotPasswordEmail,
-  verifyNewEmailAddressEmail,
 } from "../utils/emailForms";
 import generateMockUsersArray from "../utils/generateUserData";
+import { userCredentialsErrorHandler } from "../utils/inputHandler";
 import { sendEmail } from "../utils/sendEmail";
 
 const saltRounds = 12;
@@ -70,59 +68,21 @@ const userResolver = {
         let user;
         let trimmedFullName = fullName.trim();
 
-        if (!validator.isLength(trimmedFullName, { min: 3, max: 50 })) {
-          return {
-            errors: [
-              {
-                field: "fullName",
-                message: "full name must be between 3 and 50 characters long",
-              },
-            ],
-          };
-        }
-
-        if (!validator.isAlphanumeric(username, "en-US", { ignore: "_-" })) {
-          return {
-            errors: [
-              {
-                field: "username",
-                message:
-                  "username can only contain letters, numbers, underscores (_) and dashes (-)",
-              },
-            ],
-          };
-        }
-
-        if (!validator.isEmail(email)) {
-          return {
-            errors: [
-              {
-                field: "email",
-                message: "invalid email address",
-              },
-            ],
-          };
-        }
-
+        // Validating user input
         if (
-          !validator.isStrongPassword(password, {
-            minLength: 8,
-            minLowercase: 1,
-            minUppercase: 1,
-            minNumbers: 1,
-            minSymbols: 1,
-            returnScore: false,
-          })
+          userCredentialsErrorHandler(
+            trimmedFullName,
+            username,
+            email,
+            password
+          )?.errors
         ) {
-          return {
-            errors: [
-              {
-                field: "password",
-                message:
-                  "password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol",
-              },
-            ],
-          };
+          return userCredentialsErrorHandler(
+            trimmedFullName,
+            username,
+            email,
+            password
+          );
         }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -197,98 +157,6 @@ const userResolver = {
 
         req.session.userId = user.id;
         return { user };
-      } catch (error) {
-        return error;
-      }
-    },
-
-    sendNewEmailAddressVerificationEmail: async (
-      _,
-      { newEmailAddress, password },
-      { redis, req }
-    ) => {
-      try {
-        const currentUser = await User.findById(req.session.userId);
-
-        // check if email address is valid
-        if (!validator.isEmail(newEmailAddress)) {
-          return {
-            errors: [
-              {
-                field: "newEmailAddress",
-                message: "invalid email address",
-              },
-            ],
-          };
-        }
-
-        // check if the new email address is the same as the old one
-        if (newEmailAddress === currentUser.email) {
-          return {
-            errors: [
-              {
-                field: "newEmailAddress",
-                message: "new email address cannot be the same as the old one",
-              },
-            ],
-          };
-        }
-
-        // check if the new email address is already taken
-        const isEmailTaken = await User.findOne({ email: newEmailAddress });
-        if (isEmailTaken) {
-          return {
-            errors: [
-              {
-                field: "newEmailAddress",
-                message: "email address already taken",
-              },
-            ],
-          };
-        }
-
-        // verify password
-        const isOldPasswordCorrect = await bcrypt.compare(
-          password,
-          currentUser.password
-        );
-
-        if (!isOldPasswordCorrect) {
-          return {
-            errors: [
-              {
-                field: "password",
-                message: "old password does not match",
-              },
-            ],
-          };
-        }
-
-        const token = v4();
-        await redis.set(
-          VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token,
-          currentUser.id,
-          "ex",
-          1000 * 60 * 60 * 24 * 1 // 1 day
-        );
-
-        await redis.set(
-          NEW_EMAIL_ADDRESS_PREFIX + token,
-          newEmailAddress,
-          "ex",
-          1000 * 60 * 60 * 24 * 1 // 1 day
-        );
-
-        // send verification email to new email address
-        const emailResult = await sendEmail(
-          newEmailAddress,
-          "Confirm New Email Address",
-          verifyNewEmailAddressEmail(
-            `${process.env.CORS_ORIGIN}/new-email-verification/${token}`
-          )
-        );
-
-        return { user: currentUser };
       } catch (error) {
         return error;
       }

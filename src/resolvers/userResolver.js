@@ -298,7 +298,7 @@ const userResolver = {
       }
     },
 
-    changeEmailAddress: async (_, { token }, { redis }) => {
+    updateEmailAddress: async (_, { token }, { redis }) => {
       try {
         const userId = await redis.get(VERIFY_NEW_EMAIL_ADDRESS_PREFIX + token);
 
@@ -437,7 +437,7 @@ const userResolver = {
       }
     },
 
-    changeForgotPassword: async (_, { token, newPassword }, { redis, req }) => {
+    updateForgotPassword: async (_, { token, newPassword }, { redis, req }) => {
       try {
         if (
           !validator.isStrongPassword(newPassword, {
@@ -523,7 +523,7 @@ const userResolver = {
       }
     },
 
-    changePassword: async (_, { oldPassword, newPassword }, { req }) => {
+    updatePassword: async (_, { oldPassword, newPassword }, { req }) => {
       try {
         const { password } = await User.findById(req.session.userId);
         const isOldPasswordCorrect = await bcrypt.compare(
@@ -583,7 +583,7 @@ const userResolver = {
       }
     },
 
-    changeFullName: async (_, { newFullName }, { req }) => {
+    updateFullName: async (_, { newFullName }, { req }) => {
       try {
         const { fullName } = await User.findById(req.session.userId);
 
@@ -625,7 +625,7 @@ const userResolver = {
       }
     },
 
-    changeUsername: async (_, { newUsername }, { req }) => {
+    updateUsername: async (_, { newUsername }, { req }) => {
       try {
         const { username } = await User.findById(req.session.userId);
 

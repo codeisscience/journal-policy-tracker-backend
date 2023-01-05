@@ -55,18 +55,18 @@ const userType = gql`
     register(userInfo: RegisterInput!): UserResponse!
     login(userInfo: LoginInput!): UserResponse!
     forgotPassword(email: String!): Boolean!
-    changeForgotPassword(token: String!, newPassword: String!): UserResponse!
+    updateForgotPassword(token: String!, newPassword: String!): UserResponse!
     sendAccountVerificationEmail: Boolean!
     verifyUserAccount(token: String!): UserResponse!
-    changePassword(oldPassword: String!, newPassword: String!): UserResponse!
+    updatePassword(oldPassword: String!, newPassword: String!): UserResponse!
     sendNewEmailAddressVerificationEmail(
       newEmailAddress: String!
       password: String!
     ): UserResponse!
-    changeEmailAddress(token: String!): UserResponse!
+    updateEmailAddress(token: String!): UserResponse!
     logout: Boolean!
-    changeUsername(newUsername: String!): UserResponse!
-    changeFullName(newFullName: String!): UserResponse!
+    updateUsername(newUsername: String!): UserResponse!
+    updateFullName(newFullName: String!): UserResponse!
     addMockUserData(numberOfUsers: Int!): Boolean!
   }
 `;

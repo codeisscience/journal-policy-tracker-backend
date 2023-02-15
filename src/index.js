@@ -1,18 +1,19 @@
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import { ApolloServer } from "apollo-server-express";
+import connectRedis from "connect-redis";
+import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import session from "express-session";
+import { applyMiddleware } from "graphql-middleware";
+import Redis from "ioredis";
 import mongoose from "mongoose";
+import { COOKIE_NAME, __prod__ } from "./constants";
+import { authMiddleware } from "./middlewares/authMiddleware";
+import { journalMiddleware } from "./middlewares/journalMiddleware";
 import resolvers from "./resolvers";
 import typeDefs from "./types";
-import session from "express-session";
-import connectRedis from "connect-redis";
-import Redis from "ioredis";
-import cors from "cors";
-import { applyMiddleware } from "graphql-middleware";
-import { authMiddleware } from "./middlewares/authMiddleware";
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import { COOKIE_NAME, __prod__ } from "./constants";
-import { journalMiddleware } from "./middlewares/journalMiddleware";
+import { SAMPLE_EMAIL_ADDRESS, SAMPLE_USERNAME } from "./utils/emailConstants";
 import {
   accountVerificationEmail,
   emailAddressUpdateAlertEmail,
@@ -21,11 +22,6 @@ import {
   usernameUpdateAlertEmail,
   verifyNewEmailAddressEmail,
 } from "./utils/emailForms";
-import {
-  CURRENT_DATE_AND_TIME,
-  SAMPLE_EMAIL_ADDRESS,
-  SAMPLE_USERNAME,
-} from "./utils/emailConstants";
 import { getCurrentDateAndTime } from "./utils/getCurrentDateAndTime";
 
 const startServer = async () => {

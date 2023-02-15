@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import validator from "validator";
 import {
   FORGET_PASSWORD_PREFIX,
   NEW_EMAIL_ADDRESS_PREFIX,

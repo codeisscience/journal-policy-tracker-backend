@@ -62,7 +62,7 @@ const startServer = async () => {
 
   const RedisStore = connectRedis(session);
 
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
 
   app.set("trust proxy", 1);
 

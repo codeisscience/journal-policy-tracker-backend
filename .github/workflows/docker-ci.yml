@@ -22,6 +22,8 @@ jobs:
       - name: Create production env file
         env:
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
           REDIRECT_URI_GOOGLE: ${{ secrets.REDIRECT_URI_GOOGLE }}
           REFRESH_TOKEN_GOOGLE: ${{ secrets.REFRESH_TOKEN_GOOGLE }}
           CLIENT_ID_GOOGLE: ${{ secrets.CLIENT_ID_GOOGLE }}
@@ -30,6 +32,8 @@ jobs:
           touch .env.production
           echo CORS_ORIGIN=https://codeisscience.com >> .env.production
           echo SESSION_SECRET=$SESSION_SECRET >> .env.production
+          echo DATABASE_URL=$DATABASE_URL >> .env.production
+          echo REDIS_URL=$REDIS_URL >> .env.production
           echo REDIRECT_URI_GOOGLE=$REDIRECT_URI_GOOGLE >> .env.production
           echo REFRESH_TOKEN_GOOGLE=$REFRESH_TOKEN_GOOGLE >> .env.production
           echo CLIENT_ID_GOOGLE=$CLIENT_ID_GOOGLE >> .env.production
